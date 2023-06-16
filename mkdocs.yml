@@ -1,0 +1,35 @@
+site_name: Kamodo Analysis Suite
+
+nav:
+- Home: README.md
+- About: about.md
+- Introduction: notebooks/Kamodo.ipynb
+- Visualization: notebooks/Visualization.ipynb
+- Syntax: notebooks/Syntax.ipynb
+- Kamodofying Models: notebooks/Kamodofying_Models.ipynb
+- Field Integration: notebooks/FieldIntegration.ipynb
+- RPC: rpc.md
+- API: API.md
+- Contributing: CONTRIBUTING.md
+- Additional Resources: additional_resources.md
+
+theme: readthedocs
+plugins:
+  - mknotebooks:
+      execute: true
+      preamble: mkdocs_preamble.py
+  - search
+markdown_extensions:
+  - admonition
+  - tables
+  - mdx_math:
+      enable_dollar_delimiter: True 
+  - toc:
+      permalink: true
+  - markdown_include.include:
+      base_path: docs
+  - codehilite
+  - mkautodoc
+
+extra_javascript: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML

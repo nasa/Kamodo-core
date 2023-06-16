@@ -1,0 +1,143 @@
+# version: "3.7"
+version: '2.4'
+
+services:
+  kamodo-py36: # git archive --format=tar --prefix=kamodo-core/ HEAD | (cd /tmp && tar xf -)
+    image: ensemble/kamodo-py36
+    ports:
+      - "8888:8888"
+    build:
+      context: /tmp/kamodo-core
+      dockerfile: dockerfiles/kamodo-py36.Dockerfile
+    command:
+      - jupyter
+      - notebook
+      - /kamodo
+      - --port=8888
+      - --no-browser
+      - --ip=0.0.0.0
+      - --allow-root
+  kamodo-py37: # git archive --format=tar --prefix=kamodo-core/ HEAD | (cd /tmp && tar xf -)
+    image: ensemble/kamodo-py37
+    platform: linux/arm64/v8 # aarch64-linux-gnu
+    ports:
+      - "8888:8888"
+    build: 
+      context: .
+      dockerfile: dockerfiles/kamodo-py37.Dockerfile
+    command:
+      - jupyter
+      - notebook
+      - /kamodo
+      - --port=8888
+      - --no-browser
+      - --ip=0.0.0.0
+      - --allow-root
+  kamodo-py311:
+    image: ensemble/kamodo-py311
+    platform: linux/arm64/v8 # aarch64-linux-gnu
+    ports:
+      - "8888:8888"
+    build:
+      context: .
+      dockerfile: dockerfiles/kamodo-py311.Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo
+    command:
+      - jupyter
+      - notebook
+      - /kamodo
+      - --port=8888
+      - --no-browser
+      - --ip=0.0.0.0
+      - --allow-root
+  kamodo-rpc-py38:
+    build:
+      context: .
+      dockerfile: dockerfiles/kamodo-rpc-py38.Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo-core
+    ports:
+      - "60000:60000"
+    command:
+      - kamodo-rpc
+      - rpc_conf=kamodo/rpc/kamodo_rpc_test.yaml
+      - host=0.0.0.0
+      - port='60000'
+  kamodo-rpc-py37:
+    build:
+      context: .
+      dockerfile: dockerfiles/kamodo-rpc-py37.Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo-core
+    ports:
+      - "60001:60000"
+    command:
+      - kamodo-rpc
+      - rpc_conf=kamodo/rpc/kamodo_rpc_test.yaml
+      - host=0.0.0.0
+      - port='60000'
+  kamodo-dev-py37:
+    image: ensemble/kamodo-py37
+    ports:
+      - "8889:8888"
+    build: 
+      context: .
+      dockerfile: dockerfiles/kamodo-py37.Dockerfile
+    command:
+      - jupyter
+      - notebook
+      - /kamodo
+      - --port=8888
+      - --no-browser
+      - --ip=0.0.0.0
+      - --allow-root
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo
+    working_dir: /kamodo
+  kamodo-test-py36:
+    image: ensemble/kamodo-test-py36
+    build: 
+      context: .
+      dockerfile: dockerfiles/kamodo-test-py36.Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo
+    working_dir: /kamodo
+    command: ["sh", "-c", "chmod +x /kamodo/test_kamodo.sh && /kamodo/test_kamodo.sh"]
+  kamodo-test-py37:
+    image: ensemble/kamodo-test-py37
+    build: 
+      context: .
+      dockerfile: dockerfiles/kamodo-test-py37.Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo
+    working_dir: /kamodo
+    command: ["sh", "-c", "chmod +x /kamodo/test_kamodo.sh && /kamodo/test_kamodo.sh"]
+  kamodo-rpc:
+    image: ensemble/kamodo-rpc-test
+    build:
+      context: .
+      dockerfile: dockerfiles/kamodo-rpc-test.Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /kamodo
+    working_dir: /kamodo/kamodo/rpc
+    command: "python test_rpc_kamodo_server.py"
+    ports:
+      - "60000:60000"
+
+
+

@@ -1,0 +1,3 @@
+recursive-include kamodo *.yaml *.py *.js *.css *.ico *.png *__init__.py
+
+include kamodo/rpc/kamodo.capnp
