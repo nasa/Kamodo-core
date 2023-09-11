@@ -2,7 +2,7 @@
 
 ## Creating Issues
 
-For bugs, open an issue following [this guide](https://github.com/EnsembleGovServices/kamodo-core/blob/joss/.github/ISSUE_TEMPLATE/bug_report.md).
+For bugs, open an issue in GitHub.
 
 For features, provide enough context to illustrate the intended use case. If possible, include a test function that should pass once the feature is considered complete.
 
