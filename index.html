@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Kamodo Core Analysis Suite</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Home";
+        var mkdocs_page_input_path = "README.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Kamodo Core Analysis Suite
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#kamodo-environment">Kamodo Environment</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#create-kamodo-environment">Create Kamodo environment</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#loading-example-notebooks">Loading example notebooks</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-suite">Test Suite</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="about.html">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodo.html">Visualization</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Visualization.html">Vector fields</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Syntax.html">Syntax</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodofying_Models.html">Kamodofication Tutorial</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/FieldIntegration.html">Field Integration Techniques</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="rpc.html">RPC</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="API.html">API</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="additional_resources.html">Additional Resources</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kamodo Core Analysis Suite</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li class="breadcrumb-item active">Home</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="kamodo">Kamodo<a class="headerlink" href="#kamodo" title="Permanent link">&para;</a></h1>
+<p><img alt="Python 3.6" src="https://img.shields.io/badge/Python-3.6-blue.svg" />
+<img alt="Python 3.7" src="https://img.shields.io/badge/Python-3.7-blue.svg" />
+<img alt="Python 3.8" src="https://img.shields.io/badge/Python-3.8-blue.svg" />
+<img alt="Python 3.9" src="https://img.shields.io/badge/Python-3.9-blue.svg" />
+<img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-blue.svg" />
+<img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-blue.svg" /></p>
+<p><a href="https://codecov.io/gh/asherp/Kamodo"><img alt="codecov" src="https://codecov.io/gh/asherp/Kamodo/branch/master/graph/badge.svg?token=W1B3L19REF" /></a></p>
+<p>Kamodo is an open source CCMC tool for access, interpolation, and visualization of space weather models and data in python.
+Kamodo allows model developers to represent simulation results as mathematical functions which may be manipulated directly by end users.
+This general approach allows observational data to be represented functionally, through the use of interpolators.
+Kamodo handles unit conversion transparently and supports interactive science discovery in a low coding environment through jupyter notebooks.
+These features allow Kamodo to be used in other fields of study and as a teaching tool for working with real world physical data.</p>
+<p>This repository hosts the core Kamodo libraries under a permissive <a href="https://github.com/nasa/Kamodo-core//blob/master/LICENSE">NASA open source license</a>.
+The core library supports function registration, composition, unit conversion, automated plotting, LaTeX I/O, and remote procedure call (RPC) interfaces.</p>
+<p>Space weather simulation readers are implemented as subclasses of the Kamodo base class and are developed and maintained by the Community Coordinated Modeling Center, located at NASA Goddard Space Flight Center. CCMC's Kamodo readers may be found here <a href="https://github.com/nasa/Kamodo/">https://github.com/nasa/Kamodo/</a></p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p>Suppose we have a vector field defined by a function of positions in the x-y plane:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">kamodo</span> <span class="kn">import</span> <span class="n">kamodofy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">())))</span>
+
+<span class="nd">@kamodofy</span><span class="p">(</span><span class="n">units</span> <span class="o">=</span> <span class="s1">&#39;km/s&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fvec</span><span class="p">(</span><span class="n">rvec</span> <span class="o">=</span> <span class="n">points</span><span class="p">):</span>
+    <span class="n">ux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rvec</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">uy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rvec</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">ux</span><span class="p">,</span><span class="n">uy</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+</code></pre></div>
+
+<p>The @kamodofy decorator lets us register this field with units to enable unit-conversion downstream:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">kamodo</span> <span class="kn">import</span> <span class="n">Kamodo</span>
+
+<span class="n">kamodo</span> <span class="o">=</span> <span class="n">Kamodo</span><span class="p">(</span><span class="n">fvec</span> <span class="o">=</span> <span class="n">fvec</span><span class="p">)</span>
+<span class="n">kamodo</span>
+</code></pre></div>
+
+<p>When run in a jupyter notebook, the above kamodo object will render as a set of equations:</p>
+<p>
+<script type="math/tex; mode=display">\vec{f}{\left (\vec{r} \right )} [km/s] = \lambda{\left (\vec{r} \right )}</script>
+</p>
+<p>We can now evaluate our function using dot notation:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">kamodo</span><span class="o">.</span><span class="n">fvec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]]))</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="go">array([[-0.84147098,  0.54030231]])</span>
+</code></pre></div>
+
+<p>We can perform unit conversion by function composition:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">kamodo</span><span class="p">[</span><span class="s1">&#39;gvec[m/s]&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;fvec&#39;</span>
+</code></pre></div>
+
+<p>kamodo automatically generates the appropriate multiplicative factors:
+<script type="math/tex; mode=display">\vec{g}{\left (\vec{r} \right )} [m/s] = 1000 \vec{f}{\left (\vec{r} \right )}</script>
+we can verify these results through evaluation</p>
+<div class="codehilite"><pre><span></span><code><span class="n">kamodo</span><span class="o">.</span><span class="n">gvec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]]))</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="go">array([[-841.47098481,  540.30230587]])</span>
+</code></pre></div>
+
+<p>Kamodo also generates quick-look graphics via function inspection.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">plotly.io</span> <span class="k">as</span> <span class="nn">pio</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">kamodo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;fvec&#39;</span><span class="p">)</span>
+<span class="n">pio</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s1">&#39;images/fig2d-usage.svg&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><img alt="usage" src="https://raw.github.com/nasa/Kamodo-core/docs/notebooks/images/fig2d-usage.svg" /></p>
+<p>Head over to the <a href="notebooks/Kamodo.html">Introduction</a> page for more details.</p>
+<h2 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
+<p>Kamodo may be installed from pip</p>
+<div class="codehilite"><pre><span></span><code><span class="go">pip install kamodo</span>
+</code></pre></div>
+
+<p>To get the latest version of Kamodo Core, install from the NASA git repo:</p>
+<div class="codehilite"><pre><span></span><code><span class="go">pip install git+https://github.com/ccmc/Kamodo-core.git</span>
+</code></pre></div>
+
+<h3 id="kamodo-environment">Kamodo Environment<a class="headerlink" href="#kamodo-environment" title="Permanent link">&para;</a></h3>
+<p>We strongly recommend using the conda environment system to avoid library conflicts with your host machine's python.</p>
+<p>Download and install miniconda from <a href="https://conda.io/miniconda.html">here</a>. The advantage to using miniconda is that each new environment includes the bare-minimum for a project. This allows you to keep many different projects on a single work station.</p>
+<h4 id="create-kamodo-environment">Create Kamodo environment<a class="headerlink" href="#create-kamodo-environment" title="Permanent link">&para;</a></h4>
+<p>Create a new environment for kamodo</p>
+<div class="codehilite"><pre><span></span><code><span class="go">conda create -n kamodo python=3.10</span>
+<span class="go">conda activate kamodo</span>
+<span class="gp gp-VirtualEnv">(kamodo)</span> <span class="go">pip install kamodo</span>
+</code></pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The leading (kamodo) in your prompt indicates that you have activated the <code>kamodo</code> environment.
+From here on, anything you install will be isolated to the <code>kamodo</code> environment.</p>
+</div>
+<h4 id="loading-example-notebooks">Loading example notebooks<a class="headerlink" href="#loading-example-notebooks" title="Permanent link">&para;</a></h4>
+<p>If you want to run any of the notebooks in docs, you will need to install <code>jupyter</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="gp gp-VirtualEnv">(kamodo)</span> <span class="go">conda install jupyter</span>
+</code></pre></div>
+
+<p>Navigate to the top-level of the kamodo repo, then point jupyter to <code>docs/notebooks</code>:</p>
+<div class="codehilite"><pre><span></span><code>(kamodo) jupyter notebook docs/notebooks
+</code></pre></div>
+
+<p>This should open a browser window that will allow you to load any of the example notebooks.</p>
+<h4 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h4>
+<p>The following (minimum) requirements are obtained by running <code>pip install kamodo</code></p>
+<ul>
+<li>decorator&gt;=4.4.2</li>
+<li>numpy</li>
+<li>scipy</li>
+<li>sympy==1.5.1</li>
+<li>pandas</li>
+<li>plotly</li>
+<li>pytest</li>
+<li>hydra-core==0.11.3</li>
+<li>Flask==1.1.2</li>
+<li>flask-cors</li>
+<li>flask-restful==0.3.8</li>
+<li>antlr4-python3-runtime==4.7</li>
+<li>python-forge</li>
+<li>requests</li>
+<li>incremental</li>
+<li>pycapnp</li>
+<li>pyOpenSSL</li>
+</ul>
+<p>The antlr package may be necessary for rendering latex in a notebook</p>
+<div class="codehilite"><pre><span></span><code>conda<span class="w"> </span>install<span class="w"> </span>antlr-python-runtime
+</code></pre></div>
+
+<p>Plotly-orca may be needed for proper image export</p>
+<div class="codehilite"><pre><span></span><code>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>plotly<span class="w"> </span>plotly-orca<span class="w"> </span><span class="o">(</span><span class="k">for</span><span class="w"> </span>writing<span class="w"> </span>images<span class="o">)</span>
+</code></pre></div>
+
+<h2 id="test-suite">Test Suite<a class="headerlink" href="#test-suite" title="Permanent link">&para;</a></h2>
+<p>Kamodo's unit tests are run with <a href="https://docs.pytest.org/en/7.0.x/">pytest</a>. To install pytest with code coverage</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>flake8<span class="w"> </span>pytest
+pip<span class="w"> </span>install<span class="w"> </span>pytest-cov
+</code></pre></div>
+
+<p>Then, from the base of the git repo:</p>
+<div class="codehilite"><pre><span></span><code>pytest<span class="w"> </span>--cov<span class="w"> </span>kamodo.kamodo<span class="w"> </span>--cov<span class="w"> </span>kamodo.util<span class="w"> </span>--cov<span class="w"> </span>plotting<span class="w"> </span>kamodo/test_plotting.py<span class="w"> </span>kamodo/test_kamodo.py<span class="w"> </span>kamodo/test_utils.py
+</code></pre></div>
+
+<p>This will generate a test report and coverage of the <code>kamodo</code> module.</p>
+<p>To run RPC tests, you must first generate a self-signed certificate.</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>kamodo/rpc/gen_self_signed_cert.py<span class="w"> </span>certfile
+<span class="c1"># certfile.key and certfile.cert will be placed in your local directory</span>
+pytest<span class="w"> </span>kamodo/rpc/test_rpc_threaded.py
+</code></pre></div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="about.html" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="about.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.5.2
+Build Date UTC : 2023-09-11 21:27:56.428953+00:00
+-->

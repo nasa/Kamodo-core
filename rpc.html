@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>RPC - Kamodo Core Analysis Suite</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "RPC";
+        var mkdocs_page_input_path = "rpc.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Kamodo Core Analysis Suite
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="about.html">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodo.html">Visualization</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Visualization.html">Vector fields</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Syntax.html">Syntax</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodofying_Models.html">Kamodofication Tutorial</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/FieldIntegration.html">Field Integration Techniques</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="rpc.html">RPC</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#configuring-a-kamodo-server">Configuring a Kamodo server</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#starting-an-kamodo-server">Starting an Kamodo server</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#starting-a-client">Starting a client</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="API.html">API</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="additional_resources.html">Additional Resources</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kamodo Core Analysis Suite</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li class="breadcrumb-item active">RPC</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="rpc">RPC<a class="headerlink" href="#rpc" title="Permanent link">&para;</a></h1>
+<p>Kamodo includes a Remote Call Procedure (RPC) interface, based on <a href="https://capnproto.org/">capnproto</a>. This allows Kamodo objects to both serve and connect to other kamodo functions hosted on external servers.</p>
+<p>We can test this functionality using <a href="https://docs.docker.com/compose/">docker compose</a> (See the <code>docker-compose.yaml</code> file in the base of this repo).</p>
+<p>Our docker-compose configuration contains two services we can use to test this functionality:</p>
+<ul>
+<li>kamodo-rpc-py37 (runs kamodo-core with python 3.7)</li>
+<li>kamodo-rpc-py38 (runs kamodo-core with python 3.8)</li>
+</ul>
+<p>Here are the corresponding definitions in <code>docker-compose.yaml</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="nt">kamodo-rpc-py37</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dockerfiles/kamodo-rpc-py37.Dockerfile</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bind</span>
+<span class="w">        </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${PWD}</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/kamodo-core</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;60001:60000&quot;</span>
+<span class="w">  </span><span class="nt">kamodo-rpc-py38</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dockerfiles/kamodo-rpc-py38.Dockerfile</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bind</span>
+<span class="w">        </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${PWD}</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/kamodo-core</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;60000:60000&quot;</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kamodo-rpc</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rpc_conf=kamodo/rpc/kamodo_rpc_test.yaml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port=&#39;60000&#39;</span>
+</code></pre></div>
+
+<p>Either one will mount the base of the repo into the corresponding container at run time. Note that <code>kamodo-rpc-py37</code> will use port <code>60001</code>.</p>
+<h2 id="configuring-a-kamodo-server">Configuring a Kamodo server<a class="headerlink" href="#configuring-a-kamodo-server" title="Permanent link">&para;</a></h2>
+<p>To configure a Kamodo server, create a <code>kamodo_rpc.yaml</code> file. A simple example is given in the root of the kamodo-core repo:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">!Kamodo</span>
+<span class="nt">f</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x**2 - x -1</span>
+</code></pre></div>
+
+<p>The <code>!Kamodo</code> line informs our yaml parser that the next line defines a kamodo object with the following key-value pairs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The kamodo specification file is under rapid development</p>
+</div>
+<!-- #region -->
+<h2 id="starting-an-kamodo-server">Starting an Kamodo server<a class="headerlink" href="#starting-an-kamodo-server" title="Permanent link">&para;</a></h2>
+<p>To build a container compatible with python <code>3.7</code>, run</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>kamodo-rpc-py37
+</code></pre></div>
+
+<p>This will pull the latest version of <code>kamodo-core</code> and build it inside a container ready for deployment. Feel free to build on top of the resulting image.</p>
+<p>Next, start the container with:</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>kamodo-rpc-py37
+</code></pre></div>
+
+<details>
+    <summary> Click to expand console output
+
+    </summary>
+
+<div class="codehilite"><pre><span></span><code><span class="go">[+] Running 1/0</span>
+<span class="go"> ⠿ Container kamodo-core-kamodo-rpc-py37-1  Created                                                                     0.0s</span>
+<span class="go">Attaching to kamodo-core-kamodo-rpc-py37-1</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | {&#39;rpc_conf&#39;: &#39;kamodo/rpc/kamodo_rpc_test.yaml&#39;, &#39;host&#39;: &#39;0.0.0.0&#39;, &#39;port&#39;: &#39;60000&#39;}</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | serving   arg_units lhs           rhs symbol units</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | f        {}   f  x**2 - x - 1   f(x)      </span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | certfile not supplied</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | keyfile not supplied</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | using default certificate</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | Using selfsigned cert from: selfsigned.cert</span>
+<span class="go">kamodo-core-kamodo-rpc-py37-1  | [2022-05-04 22:23:23,543][rpc.proto][DEBUG] - Try IPv4</span>
+</code></pre></div>
+
+
+</details>
+
+<p>At startup, the container automatically generates an SSL key and certificate (when one is not already present). </p>
+<h2 id="starting-a-client">Starting a client<a class="headerlink" href="#starting-a-client" title="Permanent link">&para;</a></h2>
+<p>Since the root of the repo is mapped into the container, we can access the cert from the host <code>selfsigned.cert</code>.</p>
+<p>Open a separate terminal and connect to the container from your host system (use the same directory where <code>selfsigned.cert</code> i.e. the root of the mounted kamodo-core repo):</p>
+<div class="codehilite"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">kamodo</span> <span class="kn">import</span> <span class="n">KamodoClient</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">k</span> <span class="o">=</span> <span class="n">KamodoClient</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">60001</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">k</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="mi">19</span> <span class="c1"># (5)**2-(5)-1</span>
+</code></pre></div>
+
+<!-- #endregion -->
+
+<!-- #region -->
+<h1 id="rpc-spec">RPC Spec<a class="headerlink" href="#rpc-spec" title="Permanent link">&para;</a></h1>
+<p>Kamodo uses capnproto to communicate binary data between functions hosted on different systems. This avoids the need for json serialization and allows for server-side function pipelining while minimizing data transfers.</p>
+<p>Kamodo's RPC specification file is located in <code>kamodo/rpc/kamodo.capnp</code>:</p>
+<div class="codehilite"><pre><span></span><code>@0xbfd16a03c247aaa9<span class="p">;</span>
+
+
+interface<span class="w"> </span>Kamodo<span class="w"> </span><span class="o">{</span>
+<span class="w">  </span>struct<span class="w"> </span>Map<span class="o">(</span>Key,<span class="w"> </span>Value<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>entries<span class="w"> </span>@0<span class="w"> </span>:List<span class="o">(</span>Entry<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>Entry<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>key<span class="w"> </span>@0<span class="w"> </span>:Key<span class="p">;</span>
+<span class="w">      </span>value<span class="w"> </span>@1<span class="w"> </span>:Value<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span>getFields<span class="w"> </span>@0<span class="w"> </span><span class="o">()</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>fields<span class="w"> </span>:Map<span class="o">(</span>Text,<span class="w"> </span>Field<span class="o">))</span><span class="p">;</span>
+
+<span class="w">  </span>getMath<span class="w"> </span>@1<span class="w"> </span><span class="o">()</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>math<span class="w"> </span>:Map<span class="o">(</span>Text,<span class="w"> </span>Function<span class="o">))</span><span class="p">;</span>
+
+<span class="w">  </span>evaluate<span class="w"> </span>@2<span class="w"> </span><span class="o">(</span>expression:<span class="w"> </span>Expression<span class="o">)</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>value:<span class="w"> </span>Value<span class="o">)</span><span class="p">;</span>
+
+<span class="w">  </span>interface<span class="w"> </span>Value<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Wraps a numeric value in an RPC object.  This allows the value</span>
+<span class="w">    </span><span class="c1"># to be used in subsequent evaluate() requests without the client</span>
+<span class="w">    </span><span class="c1"># waiting for the evaluate() that returns the Value to finish.</span>
+
+<span class="w">    </span><span class="nb">read</span><span class="w"> </span>@0<span class="w"> </span><span class="o">()</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>value<span class="w"> </span>:Literal<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="c1"># Read back the raw numeric value.</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span>struct<span class="w"> </span>Expression<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># A numeric expression.</span>
+
+<span class="w">    </span>union<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>literal<span class="w"> </span>@0<span class="w"> </span>:Literal<span class="p">;</span>
+<span class="w">      </span><span class="c1"># A literal numeric value.</span>
+
+<span class="w">      </span>store<span class="w"> </span>@1<span class="w"> </span>:Value<span class="p">;</span>
+<span class="w">      </span><span class="c1"># A value that was (or, will be) returned by a previous</span>
+<span class="w">      </span><span class="c1"># evaluate().</span>
+
+<span class="w">      </span>parameter<span class="w"> </span>@2<span class="w"> </span>:UInt32<span class="p">;</span>
+<span class="w">      </span><span class="c1"># A parameter to the function (only valid in function bodies;</span>
+<span class="w">      </span><span class="c1"># see defFunction).</span>
+
+<span class="w">      </span>call<span class="w"> </span>:group<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="c1"># Call a function on a list of parameters.</span>
+<span class="w">        </span><span class="k">function</span><span class="w"> </span>@3<span class="w"> </span>:Function<span class="p">;</span>
+<span class="w">        </span>params<span class="w"> </span>@4<span class="w"> </span>:List<span class="o">(</span>Expression<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="c1"># Void: Void</span>
+<span class="c1"># Boolean: Bool</span>
+<span class="c1"># Integers: Int8, Int16, Int32, Int64</span>
+<span class="c1"># Unsigned integers: UInt8, UInt16, UInt32, UInt64</span>
+<span class="c1"># Floating-point: Float32, Float64</span>
+<span class="c1"># Blobs: Text, Data</span>
+<span class="c1"># Lists: List(T)</span>
+
+
+<span class="w">  </span>struct<span class="w"> </span>Literal<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>union<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>void<span class="w"> </span>@0<span class="w"> </span>:Void<span class="p">;</span>
+<span class="w">      </span>bool<span class="w"> </span>@1<span class="w"> </span>:Bool<span class="p">;</span>
+<span class="w">      </span>int8<span class="w"> </span>@2<span class="w"> </span>:Int8<span class="p">;</span>
+<span class="w">      </span>int16<span class="w"> </span>@3<span class="w"> </span>:Int16<span class="p">;</span>
+<span class="w">      </span>int32<span class="w"> </span>@4<span class="w"> </span>:Int32<span class="p">;</span>
+<span class="w">      </span>int64<span class="w"> </span>@5<span class="w"> </span>:Int64<span class="p">;</span>
+<span class="w">      </span>uint8<span class="w"> </span>@6<span class="w"> </span>:UInt8<span class="p">;</span>
+<span class="w">      </span>uint16<span class="w"> </span>@7<span class="w"> </span>:UInt16<span class="p">;</span>
+<span class="w">      </span>uint32<span class="w"> </span>@8<span class="w"> </span>:UInt32<span class="p">;</span>
+<span class="w">      </span>uint64<span class="w"> </span>@9<span class="w"> </span>:UInt64<span class="p">;</span>
+<span class="w">      </span>float32<span class="w"> </span>@10<span class="w"> </span>:Float32<span class="p">;</span>
+<span class="w">      </span>float64<span class="w"> </span>@11<span class="w"> </span>:Float64<span class="p">;</span>
+<span class="w">      </span>text<span class="w"> </span>@12<span class="w"> </span>:Text<span class="p">;</span>
+<span class="w">      </span>data<span class="w"> </span>@13<span class="w"> </span>:Data<span class="p">;</span>
+<span class="w">      </span>list<span class="w"> </span>@14<span class="w"> </span>:List<span class="o">(</span>Literal<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span>array<span class="w"> </span>@15<span class="w"> </span>:Array<span class="p">;</span>
+<span class="w">      </span>int<span class="w"> </span>@16<span class="w"> </span>:Text<span class="p">;</span>
+<span class="w">      </span>listint64<span class="w"> </span>@17<span class="w"> </span>:List<span class="o">(</span>Int64<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span>listfloat64<span class="w"> </span>@18<span class="w"> </span>:List<span class="o">(</span>Float64<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span>rational<span class="w"> </span>@19<span class="w"> </span>:Rational<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span>struct<span class="w"> </span>Rational<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>p<span class="w"> </span>@0<span class="w"> </span>:Int64<span class="p">;</span>
+<span class="w">    </span>q<span class="w"> </span>@1<span class="w"> </span>:Int64<span class="p">;</span>
+<span class="w">  </span><span class="o">}</span>
+
+
+<span class="w">  </span><span class="c1"># everything needed for registration</span>
+<span class="w">  </span>struct<span class="w"> </span>Field<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>func<span class="w"> </span>@0<span class="w"> </span>:Function<span class="p">;</span>
+<span class="w">    </span>meta<span class="w"> </span>@1<span class="w"> </span>:Meta<span class="p">;</span>
+<span class="w">    </span>data<span class="w"> </span>@2<span class="w"> </span>:Array<span class="p">;</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span><span class="c1"># match kamodo&#39;s meta attribute</span>
+<span class="w">  </span>struct<span class="w"> </span>Meta<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>units<span class="w"> </span>@0<span class="w"> </span>:Text<span class="p">;</span>
+<span class="w">    </span>argUnits<span class="w"> </span>@1<span class="w"> </span>:Map<span class="o">(</span>Text,<span class="w"> </span>Text<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span>citation<span class="w"> </span>@2<span class="w"> </span>:Text<span class="p">;</span>
+<span class="w">    </span>equation<span class="w"> </span>@3<span class="w"> </span>:Text<span class="p">;</span><span class="w"> </span><span class="c1"># latex expression</span>
+<span class="w">    </span>hiddenArgs<span class="w"> </span>@4<span class="w"> </span>:List<span class="o">(</span>Text<span class="o">)</span><span class="p">;</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span>struct<span class="w"> </span>Argument<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>name<span class="w"> </span>@0<span class="w"> </span>:Text<span class="p">;</span>
+<span class="w">    </span>value<span class="w"> </span>@1<span class="w"> </span>:Literal<span class="p">;</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span><span class="c1"># needs to be an interface</span>
+<span class="w">  </span>struct<span class="w"> </span>Array<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>data<span class="w"> </span>@0<span class="w"> </span>:Data<span class="p">;</span>
+<span class="w">    </span>shape<span class="w"> </span>@1<span class="w"> </span>:List<span class="o">(</span>UInt32<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span>dtype<span class="w"> </span>@2<span class="w"> </span>:Text<span class="p">;</span>
+
+<span class="w">  </span><span class="o">}</span>
+
+<span class="w">  </span>interface<span class="w"> </span>Function<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># A pythonic function f(*args, **kwargs)</span>
+<span class="w">    </span>call<span class="w"> </span>@0<span class="w"> </span><span class="o">(</span>args<span class="w"> </span>:List<span class="o">(</span>Literal<span class="o">)</span>,<span class="w"> </span>kwargs<span class="w"> </span>:List<span class="o">(</span>Argument<span class="o">))</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>result:<span class="w"> </span>Literal<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span>getArgs<span class="w"> </span>@1<span class="w"> </span><span class="o">()</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>args<span class="w"> </span>:List<span class="o">(</span>Text<span class="o">))</span><span class="p">;</span>
+<span class="w">    </span>getKwargs<span class="w"> </span>@2<span class="w"> </span><span class="o">()</span><span class="w"> </span>-&gt;<span class="w"> </span><span class="o">(</span>kwargs:<span class="w"> </span>List<span class="o">(</span>Argument<span class="o">))</span><span class="p">;</span>
+<span class="w">  </span><span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+
+<p>The above spec allows a Kamodo client (or server) to be implemented in many languages, including <a href="https://capnproto.org/cxx.html">C++</a>, C# (.NET Core), Erlang, Go, Haskell, JavaScript, OCaml, and Rust.</p>
+<p>Further reading on capnproto may be found here: </p>
+<ul>
+<li><a href="https://capnproto.org/index.html">Overview</a></li>
+<li><a href="https://capnproto.org/language.html">Schema language</a></li>
+<li><a href="https://capnproto.org/rpc.html">RPC</a></li>
+<li>Python implementation - <a href="http://capnproto.github.io/pycapnp/quickstart.html">pycapnp</a></li>
+</ul>
+<!-- #endregion -->
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="notebooks/FieldIntegration.html" class="btn btn-neutral float-left" title="Field Integration Techniques"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="API.html" class="btn btn-neutral float-right" title="API">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="notebooks/FieldIntegration.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="API.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

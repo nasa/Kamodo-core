@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>About - Kamodo Core Analysis Suite</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "About";
+        var mkdocs_page_input_path = "about.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Kamodo Core Analysis Suite
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="about.html">About</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#kameleon-legacy">Kameleon legacy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#design-philosophy">Design philosophy</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodo.html">Visualization</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Visualization.html">Vector fields</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Syntax.html">Syntax</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodofying_Models.html">Kamodofication Tutorial</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/FieldIntegration.html">Field Integration Techniques</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="rpc.html">RPC</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="API.html">API</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="additional_resources.html">Additional Resources</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kamodo Core Analysis Suite</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li class="breadcrumb-item active">About</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="about-kamodo">About Kamodo<a class="headerlink" href="#about-kamodo" title="Permanent link">&para;</a></h1>
+<p>Kamodo has been under development at the Community Coordinated Modeling Center (CCMC), NASA GSFC since May, 2018. The CCMC supports the space weather community by providing software and services guided by domain experts in a variety of heliophysic science domains. Ensemble Government Services LLC is a minority-owned small business contributing to the development of Kamodo, funded via NASA SBIR Phase 1 and 2 grants. </p>
+<p>Kamodo supports the goals of the CCMC by:</p>
+<ul>
+<li>Bringing together models and data into a single high-level mathematical framework</li>
+<li>Allows scientists and educators to work with complex space weather models and data with little or no coding experience</li>
+<li>Provides an easy-to-extend framework for developers. </li>
+<li>Enabling streamlined satellite fly through simulations, model/data comparisons, rapid 1D, 2D, 3D and 4D visualizations. </li>
+</ul>
+<h3 id="kameleon-legacy">Kameleon legacy<a class="headerlink" href="#kameleon-legacy" title="Permanent link">&para;</a></h3>
+<p>Kamodo shares some similarities with its predecessor, the CCMC's Kameleon Software Suite, insofaras it provides a unified API for space weather models. However, Kamodo gets there through a very different means: by leveraging cutting-edge python projects from both the heliophysics community (sunpy, spacepy, etc.) as well as more general mathematical frameworks like sympy. This allows Kamodo to be much more broad in its application, able to handle arbirtary scientific data and physics-based models. At the same time, by  building on the tools provided by model and data providers, Kamodo inherits the high performance necessary for data analysis. We felt that due to the large departure in both design and scope from Kameleon, it was necessary to launch Kamodo as a separate project under a different moniker.</p>
+<h2 id="design-philosophy">Design philosophy<a class="headerlink" href="#design-philosophy" title="Permanent link">&para;</a></h2>
+<p>Primary Design considerations</p>
+<ul>
+<li>Open Source (Apache 2.0)</li>
+<li>Should be format-, model-, data-agnostic</li>
+<li>Should support all types of users (non-coders, devs, modelers). <em>Anyone can cook!</em></li>
+<li>Carrot approach to metadata (useful, but not mandatory)</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="notebooks/Kamodo.html" class="btn btn-neutral float-right" title="Visualization">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="index.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="notebooks/Kamodo.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

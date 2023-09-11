@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Contributing - Kamodo Core Analysis Suite</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Contributing";
+        var mkdocs_page_input_path = "CONTRIBUTING.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Kamodo Core Analysis Suite
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="about.html">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodo.html">Visualization</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Visualization.html">Vector fields</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Syntax.html">Syntax</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/Kamodofying_Models.html">Kamodofication Tutorial</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="notebooks/FieldIntegration.html">Field Integration Techniques</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="rpc.html">RPC</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="API.html">API</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="CONTRIBUTING.html">Contributing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#creating-issues">Creating Issues</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#developer-setup">Developer setup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-a-pull-request">Creating a Pull Request</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#branching">Branching</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#generating-docs">Generating Docs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#releasing">Releasing</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#upgrading">Upgrading</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#update-github-workflow">Update github workflow</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#create-dockerfile">Create dockerfile</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#update-docker-compose">Update docker-compose</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#hourly-optional">Hourly (optional)</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="additional_resources.html">Additional Resources</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kamodo Core Analysis Suite</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li class="breadcrumb-item active">Contributing</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
+<h2 id="creating-issues">Creating Issues<a class="headerlink" href="#creating-issues" title="Permanent link">&para;</a></h2>
+<p>For bugs, open an issue in GitHub.</p>
+<p>For features, provide enough context to illustrate the intended use case. If possible, include a test function that should pass once the feature is considered complete.</p>
+<h2 id="developer-setup">Developer setup<a class="headerlink" href="#developer-setup" title="Permanent link">&para;</a></h2>
+<p>Clone the git repo and install kamodo in developer mode: from the base of the repo:</p>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</code></pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you add any files while in editor mode, make sure they will be picked up by the MANIFEST.in file.</p>
+</div>
+<p>Kamodo is cross-platform, so you should be able work on whatever developing environment is convenient for you.
+However, we find it helpful to mount the code into a docker container and we provide a docker-compose.yaml. This causes the least disruption with your machine and makes it easier to deploy Kamodo containers to cloud services.
+If you have installed docker with docker <code>compose</code>, you can spin up a developer environment with one line from the base of the repo:</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up
+</code></pre></div>
+
+<h2 id="creating-a-pull-request">Creating a Pull Request<a class="headerlink" href="#creating-a-pull-request" title="Permanent link">&para;</a></h2>
+<p>Want to contribute to Kamodo-core? Open a pull request!</p>
+<h3 id="branching">Branching<a class="headerlink" href="#branching" title="Permanent link">&para;</a></h3>
+<p>First create a branch off of <code>master</code>, named after the feature or issue you are targeting.</p>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>issue-999
+</code></pre></div>
+
+<p>You may start your PR when you prefer, depending on how much support you'll need to complete it, but remember it should be up-to-date with <code>master</code> before it can be merged.</p>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<p>Run tests locally prior to pushing.</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>flake8<span class="w"> </span>pytest
+pip<span class="w"> </span>install<span class="w"> </span>pytest-cov
+</code></pre></div>
+
+<p>Then, from the base of the git repo</p>
+<div class="codehilite"><pre><span></span><code>pytest<span class="w"> </span>--cov<span class="w"> </span>kamodo.kamodo<span class="w"> </span>--cov<span class="w"> </span>kamodo.util<span class="w"> </span>--cov<span class="w"> </span>plotting<span class="w"> </span>kamodo/test_plotting.py<span class="w"> </span>kamodo/test_kamodo.py<span class="w"> </span>kamodo/test_utils.py
+</code></pre></div>
+
+<p>Try to at least maintain the current code coverage with your PR.</p>
+<h3 id="generating-docs">Generating Docs<a class="headerlink" href="#generating-docs" title="Permanent link">&para;</a></h3>
+<p>Kamodo's documentation site is a good example of how to embed your own plots in your own website.
+The documentation site is generated by the <code>mkdocs</code> package with some addons</p>
+<ul>
+<li>mkdocs - handles site generation and deployment (configured by top-level <code>mkdocs.yaml</code>)</li>
+<li>markdown-include - allows for embedding of markdown files (and graph divs) outside the docs folder</li>
+<li>python-markdown-math - enables LaTeX rendering</li>
+<li>mknotebooks - allows for the embedding of jupyter notebooks</li>
+</ul>
+<p>All of the above requirements can be installed with this line:</p>
+<div class="codehilite"><pre><span></span><code><span class="go">pip install mkdocs python-markdown-math markdown-include mknotebooks</span>
+</code></pre></div>
+
+<p>You can then generate the docs and serve locally with</p>
+<p><code>mkdocs serve</code></p>
+<p>To deploy your own documentation on github-pages:</p>
+<p><code>mkdocs gh-deploy</code></p>
+<p>This generates a gh-pages branch with the static site files and pushes it to github. Github automatically creates a website url based on that branch.</p>
+<h3 id="releasing">Releasing<a class="headerlink" href="#releasing" title="Permanent link">&para;</a></h3>
+<p>Kamodo uses calendar versioning via <a href="https://pypi.org/project/incremental/">incremental</a>:</p>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>incremental
+</code></pre></div>
+
+<p>To update the package</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>kamodo<span class="w"> </span><span class="c1"># navigate from base of repo into package</span>
+python<span class="w"> </span>-m<span class="w"> </span>incremental.update<span class="w"> </span>versioning<span class="w"> </span><span class="c1"># assigns a new (calender) version number within module </span>
+<span class="c1"># python -m incremental.update versioning --rc # for release candidate</span>
+git<span class="w"> </span>add<span class="w"> </span>versioning<span class="w"> </span><span class="c1"># stage version update</span>
+hourly<span class="w"> </span>commit.message<span class="o">=</span><span class="s2">&quot;version update, other features here&quot;</span><span class="w"> </span><span class="c1"># commit version update (optional)</span>
+<span class="nb">cd</span><span class="w"> </span>..<span class="w"> </span><span class="c1"># navigate back to base of repo</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span><span class="c1"># update local version</span>
+git<span class="w"> </span>tag<span class="w"> </span>version_number_here<span class="w"> </span><span class="c1"># create new tag</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>version_number_here<span class="w"> </span><span class="c1"># triggers pypi update (requires adequate github permissions)</span>
+</code></pre></div>
+
+<h3 id="upgrading">Upgrading<a class="headerlink" href="#upgrading" title="Permanent link">&para;</a></h3>
+<p>New versions of kamodo's dependencies will require periodic updates to the
+core package. The following steps should be followed to keep this package maintained.</p>
+<ol>
+<li>Update github workflow</li>
+<li>Create dockerfile</li>
+<li>Update docker-compose.yml</li>
+<li>Update setup.cfg</li>
+<li>Update pypi package</li>
+</ol>
+<h4 id="update-github-workflow">Update github workflow<a class="headerlink" href="#update-github-workflow" title="Permanent link">&para;</a></h4>
+<p>In the base of this repo <code>.github/workflows/kamodo-package.yml</code>, edit the jobs section to
+reflect the inteded versions of python to support</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;3.7&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;3.9&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;3.10&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;3.11&#39;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+
+<p>Whenever a commit is pushed to this repo, all of the listed python versions will be tested.
+If any errors show up, this will reveal any changes we need so that all tests pass.</p>
+<h4 id="create-dockerfile">Create dockerfile<a class="headerlink" href="#create-dockerfile" title="Permanent link">&para;</a></h4>
+<p>Builds with different base dependencies (such as python versions) require their own docker files.
+This allows developers to develop and test changes locally. Add the build to <code>dockerfiles/&lt;build-name&gt;.Dockerfile</code>. For example, an appropriate image for python 3.11 is in <code>dockerfiles/kamodo-py311.Dockerfile</code>.</p>
+<h4 id="update-docker-compose">Update docker-compose<a class="headerlink" href="#update-docker-compose" title="Permanent link">&para;</a></h4>
+<p>Include runtime parameters for your upgrade in <code>docker-compose.yml</code>. For example, the following docker compose service can be run like this</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>kamodo-py311<span class="w"> </span><span class="c1"># builds and hosts a python-3.11 kamodo notebook server at localhost:8888</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="nt">kamodo-py311</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ensemble/kamodo-py311</span>
+<span class="w">    </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux/arm64/v8</span><span class="w"> </span><span class="c1"># aarch64-linux-gnu</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8888:8888&quot;</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dockerfiles/kamodo-py311.Dockerfile</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bind</span>
+<span class="w">        </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${PWD}</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/kamodo</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notebook</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/kamodo</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--port=8888</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--no-browser</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--ip=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--allow-root</span>
+</code></pre></div>
+
+<h3 id="hourly-optional">Hourly (optional)<a class="headerlink" href="#hourly-optional" title="Permanent link">&para;</a></h3>
+<p>Consider using <a href="https://github.com/asherp/hourly">hourly</a> for time tracking your branch. This will allow future developers to see which parts of the code receive the most attention. </p>
+<p>If you're using hourly, you'll want to configure <code>hourly.yaml</code> so that your worklog points to a file named after you:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">work_log</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">header_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worklogs/my_github_username.md</span>
+</code></pre></div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="API.html" class="btn btn-neutral float-left" title="API"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="additional_resources.html" class="btn btn-neutral float-right" title="Additional Resources">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="API.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="additional_resources.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
