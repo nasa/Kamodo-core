@@ -11,17 +11,17 @@
 
 [![codecov](https://codecov.io/gh/asherp/Kamodo/branch/master/graph/badge.svg?token=W1B3L19REF)](https://codecov.io/gh/asherp/Kamodo)
 
-Kamodo originated as a CCMC tool for access, interpolation, and visualization of space weather models and data in python.
+Kamodo is an open source CCMC tool for access, interpolation, and visualization of space weather models and data in python.
 Kamodo allows model developers to represent simulation results as mathematical functions which may be manipulated directly by end users.
 This general approach allows observational data to be represented functionally, through the use of interpolators.
 Kamodo handles unit conversion transparently and supports interactive science discovery in a low coding environment through jupyter notebooks.
 These features allow Kamodo to be used in other fields of study and as a teaching tool for working with real world physical data.
 
 
-This repository hosts the core Kamodo libraries under a permissive [NASA open source license](https://github.com/EnsembleGovServices/kamodo-core/blob/master/LICENSE).
+This repository hosts the core Kamodo libraries under a permissive [NASA open source license](https://github.com/nasa/Kamodo-core//blob/master/LICENSE).
 The core library supports function registration, composition, unit conversion, automated plotting, LaTeX I/O, and remote procedure call (RPC) interfaces.
 
-Space weather simulation readers are implemented as subclasses of the Kamodo base class and are developed and maintained by the Community Coordinated Modeling Center, located at NASA Goddard Space Flight Center. CCMC's Kamodo readers may be found here [https://ccmc.gsfc.nasa.gov/Kamodo/](https://ccmc.gsfc.nasa.gov/Kamodo/)
+Space weather simulation readers are implemented as subclasses of the Kamodo base class and are developed and maintained by the Community Coordinated Modeling Center, located at NASA Goddard Space Flight Center. CCMC's Kamodo readers may be found here [https://github.com/nasa/Kamodo/](https://github.com/nasa/Kamodo/)
 
 
 ## Usage
@@ -83,7 +83,7 @@ import plotly.io as pio
 fig = kamodo.plot('fvec')
 pio.write_image(fig, 'images/fig2d-usage.svg')
 ```
-![usage](https://raw.githubusercontent.com/EnsembleGovServices/kamodo-core/joss/docs/notebooks/images/fig2d-usage.svg)
+![usage](https://raw.github.com/nasa/Kamodo-core/docs/notebooks/images/fig2d-usage.svg)
 
 Head over to the [Introduction](notebooks/Kamodo.ipynb) page for more details.
 
@@ -96,10 +96,10 @@ Kamodo may be installed from pip
 pip install kamodo
 ```
 
-Kamodo is now maintained by Ensemble Government Services. To get the latest version, install from the Ensemble git repo:
+To get the latest version of Kamodo Core, install from the NASA git repo:
 
 ```console
-pip install git+https://github.com/EnsembleGovServices/kamodo-core.git
+pip install git+https://github.com/ccmc/Kamodo-core.git
 ```
 
 ### Kamodo Environment
@@ -113,7 +113,7 @@ Download and install miniconda from [here](https://conda.io/miniconda.html). The
 Create a new environment for kamodo
 
 ```console
-conda create -n kamodo python=3.7
+conda create -n kamodo python=3.10
 conda activate kamodo
 (kamodo) pip install kamodo
 ```
@@ -169,9 +169,6 @@ Plotly-orca may be needed for proper image export
 ```sh
 conda install -c plotly plotly-orca (for writing images)
 ```
-
-!!! note
-    plotly version in flux
 
 
 ## Test Suite
