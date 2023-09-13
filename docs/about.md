@@ -1,6 +1,6 @@
 # About Kamodo
 
-Kamodo has been under development at the Community Coordinated Modeling Center (CCMC), NASA GSFC since May, 2018. The CCMC supports the space weather community by providing software and services guided by domain experts in a variety of heliophysic science domains. Ensemble Government Services LLC is a minority-owned small business responsible for the commercialization and development of Kamodo, funded via the NASA SBIR Phase 1 and 2 grants. 
+Kamodo has been under development at the Community Coordinated Modeling Center (CCMC), NASA GSFC since May, 2018. The CCMC supports the space weather community by providing software and services guided by domain experts in a variety of heliophysic science domains. Ensemble Government Services LLC is a minority-owned small business contributing to the development of Kamodo, funded via NASA SBIR Phase 1 and 2 grants. 
 
 Kamodo supports the goals of the CCMC by:
 
