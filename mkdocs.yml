@@ -21,7 +21,6 @@ plugins:
       kernel_name: python3
       execute: False
       ignore_h1_titles: False
-      preamble: mkdocs_preamble.py
   - search
 markdown_extensions:
   - admonition
