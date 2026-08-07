@@ -17,7 +17,7 @@ Kamodo shares some similarities with its predecessor, the CCMC's Kameleon Softwa
 
 Primary Design considerations
 
-* Open Source (Apache 2.0)
+* Open Source
 * Should be format-, model-, data-agnostic
 * Should support all types of users (non-coders, devs, modelers). *Anyone can cook!*
 * Carrot approach to metadata (useful, but not mandatory)

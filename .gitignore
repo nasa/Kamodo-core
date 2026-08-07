@@ -110,3 +110,9 @@ outputs/
 # hourly 
 hourly.yaml
 hourly-outputs/
+
+# Mac files
+.DS_Store
+
+iframe_figures
+

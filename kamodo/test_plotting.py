@@ -453,7 +453,7 @@ def test_line_plot_len_of_result_3():
 
     assert trace['mode'] == 'lines'
     assert chart_type == '2d-line'
-    assert layout['title'] == title
+    assert layout['title']['text'] == title
 
 
 def test_line_plot_len_of_result_4():

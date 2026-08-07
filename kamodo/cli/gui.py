@@ -6,7 +6,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from kamodo.cli.main import eval_config
 from kamodo import get_defaults
-import plotly.graph_objs as go
+import plotly.graph_objects as go
 from dash.dependencies import Input, Output, ClientsideFunction, State
 import numpy as np
 from os import path

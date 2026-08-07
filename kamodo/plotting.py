@@ -7,7 +7,7 @@ from collections import defaultdict
 
 import numpy as np
 import pandas as pd
-import plotly.graph_objs as go
+import plotly.graph_objects as go
 from plotly import figure_factory as ff
 
 from util import arg_to_latex, beautify_latex, cast_0_dim, get_defaults
@@ -65,11 +65,11 @@ def scatter_plot(result, titles, verbose=False, **kwargs):
                              )
 
         layout = go.Layout(
-            title=titles['title'],
+            title=dict(text=titles['title']),
             scene=dict(
-                xaxis=dict(title='x'),
-                yaxis=dict(title='y'),
-                zaxis=dict(title='z'),
+                xaxis=dict(title=dict(text='x')),
+                yaxis=dict(title=dict(text='y')),
+                zaxis=dict(title=dict(text='z')),
             ))
         chart_type = '3d-scatter'
     else:
@@ -127,9 +127,9 @@ def line_plot(result, titles, verbose=False, **kwargs):
             assert f.shape == t.shape
             y = f
             layout = go.Layout(
-                title=titles['title'],
-                xaxis=dict(title='${}$'.format(t_name)),
-                yaxis=dict(title=titles['title_lhs']))
+                title=dict(text=titles['title']),
+                xaxis=dict(title=dict(text='${}$'.format(t_name))),
+                yaxis=dict(title=dict(text=titles['title_lhs'])))
             trace = go.Scatter(x=t, y=y, name=titles['title_short'])
             chart_type = 'line'
 
@@ -143,16 +143,16 @@ def line_plot(result, titles, verbose=False, **kwargs):
                 x = f.values[:, 0]
                 y = f.values[:, 1]
                 trace = go.Scatter(x=x, y=y, text=text)
-                layout = go.Layout(title=titles['title'],
-                                   xaxis=dict(title=f.columns[0] + titles['units']),
-                                   yaxis=dict(title=f.columns[1] + titles['units']))
+                layout = go.Layout(title=dict(text=titles['title']),
+                                   xaxis=dict(title=dict(text=f.columns[0] + titles['units'])),
+                                   yaxis=dict(title=dict(text=f.columns[1] + titles['units'])))
             else:
                 x = f[:, 0]
                 y = f[:, 1]
                 trace = go.Scatter(x=x, y=y, text=text)
-                layout = go.Layout(title=titles['title'],
-                                   xaxis=dict(title='x' + titles['units']),
-                                   yaxis=dict(title='y' + titles['units']))
+                layout = go.Layout(title=dict(text=titles['title']),
+                                   xaxis=dict(title=dict(text='x' + titles['units'])),
+                                   yaxis=dict(title=dict(text='y' + titles['units'])))
 
             chart_type = '2d-line'
 
@@ -167,22 +167,22 @@ def line_plot(result, titles, verbose=False, **kwargs):
                 z = f.values[:, 2]
 
                 layout = go.Layout(
-                    title=titles['title'],
+                    title=dict(text=titles['title']),
                     scene=dict(
-                        xaxis=dict(title=str(f.columns[0]) + titles['units']),
-                        yaxis=dict(title=str(f.columns[1]) + titles['units']),
-                        zaxis=dict(title=str(f.columns[2]) + titles['units']),
+                        xaxis=dict(title=dict(text=str(f.columns[0]) + titles['units'])),
+                        yaxis=dict(title=dict(text=str(f.columns[1]) + titles['units'])),
+                        zaxis=dict(title=dict(text=str(f.columns[2]) + titles['units'])),
                     ))
             else:
                 x = f[:, 0]
                 y = f[:, 1]
                 z = f[:, 2]
                 layout = go.Layout(
-                    title=titles['title'],
+                    title=dict(text=titles['title']),
                     scene=dict(
-                        xaxis=dict(title='x' + titles['units']),
-                        yaxis=dict(title='y' + titles['units']),
-                        zaxis=dict(title='z' + titles['units']),
+                        xaxis=dict(title=dict(text='x' + titles['units'])),
+                        yaxis=dict(title=dict(text='y' + titles['units'])),
+                        zaxis=dict(title=dict(text='z' + titles['units'])),
                     ))
             # t_name, t = result.items()[0]
             text = ["{}:{}".format(t_name, v) for v in t]
@@ -218,12 +218,12 @@ def line_plot(result, titles, verbose=False, **kwargs):
             mode='lines')
 
         layout = dict(
-            title=titles['title'],
-            xaxis_title=arg0,
-            yaxis_title=arg1,
+            title=dict(text=titles['title']),
+            xaxis=dict(title=dict(text=arg0)),
+            yaxis=dict(title=dict(text=arg1)),
             scene=dict(
-                xaxis=dict(title=arg0),
-                yaxis=dict(title=arg1),
+                xaxis=dict(title=dict(text=arg0)),
+                yaxis=dict(title=dict(text=arg1)),
             ))
         chart_type = '2d-line'
 
@@ -252,11 +252,11 @@ def line_plot(result, titles, verbose=False, **kwargs):
                 colorscale='Viridis'),
             mode='lines')
         layout = go.Layout(
-            title=titles['title'],
+            title=dict(text=titles['title']),
             scene=dict(
-                xaxis=dict(title=arg0),
-                yaxis=dict(title=arg1),
-                zaxis=dict(title=arg2), ))
+                xaxis=dict(title=dict(text=arg0)),
+                yaxis=dict(title=dict(text=arg1)),
+                zaxis=dict(title=dict(text=arg2)), ))
         chart_type = '4d-line'
     else:
         raise NotImplementedError('shape not supported: {}'.format(f.shape))
@@ -313,9 +313,9 @@ def vector_plot(result, titles, verbose=False, **kwargs):
                 print(v_.shape)
             raise
 
-        layout = go.Layout(title=titles['title'],
-                           xaxis=dict(title='x'),
-                           yaxis=dict(title='y'))
+        layout = go.Layout(title=dict(text=titles['title']),
+                           xaxis=dict(title=dict(text='x')),
+                           yaxis=dict(title=dict(text='y')))
         chart_type = '2d-vector'
 
     # check if this is a 3d vector plot: input and output should have shape 3d
@@ -350,11 +350,11 @@ def vector_plot(result, titles, verbose=False, **kwargs):
         )
 
         layout = go.Layout(
-            title=titles['title'],
+            title=dict(text=titles['title']),
             scene=dict(
-                xaxis=dict(title='x'),
-                yaxis=dict(title='y'),
-                zaxis=dict(title='z'),
+                xaxis=dict(title=dict(text='x')),
+                yaxis=dict(title=dict(text='y')),
+                zaxis=dict(title=dict(text='z')),
             ))
         chart_type = '3d-vector'
     else:
@@ -383,7 +383,7 @@ def contour_plot(result, titles, indexing, verbose=False, **kwargs):
 
     """
     try:
-        colorbar_title = dict(title=titles['title_short'], titleside='bottom')
+        colorbar_title = dict(title=dict(text=titles['title_short'], side='bottom'))
     except KeyError:
         pass
     variable = titles['variable']
@@ -436,9 +436,9 @@ def contour_plot(result, titles, indexing, verbose=False, **kwargs):
                                    y=val1)
 
         layout = go.Layout(
-            title=title,
-            xaxis=dict(title='${}$'.format(arg0)),
-            yaxis=dict(title='${}$'.format(arg1)))
+            title=dict(text=title),
+            xaxis=dict(title=dict(text='${}$'.format(arg0))),
+            yaxis=dict(title=dict(text='${}$'.format(arg1))))
         traces.append(trace)
         chart_type = '2d-grid'
     else:
@@ -446,8 +446,8 @@ def contour_plot(result, titles, indexing, verbose=False, **kwargs):
             print('\t\t2-d args', val0.shape, val1.shape)
         assert val0.shape == val1.shape
         assert val0.shape == z.shape
-        xaxis = dict(title=beautify_latex('${}$'.format(arg_to_latex(arg0))))
-        yaxis = dict(title=beautify_latex('${}$'.format(arg_to_latex(arg1))))
+        xaxis = dict(title=dict(text=beautify_latex('${}$'.format(arg_to_latex(arg0)))))
+        yaxis = dict(title=dict(text=beautify_latex('${}$'.format(arg_to_latex(arg1)))))
         carpet_traces, layout = carpet_plot(result, title, xaxis, yaxis)
         traces.extend(carpet_traces)
         chart_type = '2d-skew'
@@ -564,11 +564,11 @@ def plane(result, titles, indexing='xy', verbose=False, **kwargs):
         z=zz.squeeze(),
         surfacecolor=surfacecolor))
     layout = go.Layout(
-        title=titles['title'],
+        title=dict(text=titles['title']),
         scene=dict(
-            xaxis=dict(title=arg0),
-            yaxis=dict(title=arg1),
-            zaxis=dict(title=arg2),
+            xaxis=dict(title=dict(text=arg0)),
+            yaxis=dict(title=dict(text=arg1)),
+            zaxis=dict(title=dict(text=arg2)),
         )
     )
     chart_type = '3d-plane'
@@ -614,11 +614,11 @@ def surface(result, titles, verbose=False, **kwargs):
             z=zz,
             surfacecolor=surfacecolor))
         layout = go.Layout(
-            title=title,
+            title=dict(text=title),
             scene=dict(
-                xaxis=dict(title=arg0),
-                yaxis=dict(title=arg1),
-                zaxis=dict(title=arg2), ))
+                xaxis=dict(title=dict(text=arg0)),
+                yaxis=dict(title=dict(text=arg1)),
+                zaxis=dict(title=dict(text=arg2)), ))
         chart_type = '3d-surface-scalar'
 
     elif len(result[variable].shape) == 1:
@@ -632,11 +632,11 @@ def surface(result, titles, verbose=False, **kwargs):
                 z=val2,
             ))
             layout = go.Layout(
-                title=title,
+                title=dict(text=title),
                 scene=dict(
-                    xaxis=dict(title=arg0),
-                    yaxis=dict(title=arg1),
-                    zaxis=dict(title=arg2),
+                    xaxis=dict(title=dict(text=arg0)),
+                    yaxis=dict(title=dict(text=arg1)),
+                    zaxis=dict(title=dict(text=arg2)),
                 ))
             chart_type = '3d-surface'
 
@@ -656,11 +656,11 @@ def surface(result, titles, verbose=False, **kwargs):
             z=zz,
         ))
         layout = go.Layout(
-            title=title,
+            title=dict(text=title),
             scene=dict(
-                xaxis=dict(title=arg0),
-                yaxis=dict(title=arg1),
-                zaxis=dict(title=arg2),
+                xaxis=dict(title=dict(text=arg0)),
+                yaxis=dict(title=dict(text=arg1)),
+                zaxis=dict(title=dict(text=arg2)),
             )
         )
 
@@ -708,11 +708,11 @@ def tri_surface_plot(result, titles, verbose=False, **kwargs):
         showscale=True)
 
     layout = go.Layout(
-        title=titles['title'],
+        title=dict(text=titles['title']),
         scene=dict(
-            xaxis=dict(title=arg0),
-            yaxis=dict(title=arg1),
-            zaxis=dict(title=arg2), ))
+            xaxis=dict(title=dict(text=arg0)),
+            yaxis=dict(title=dict(text=arg1)),
+            zaxis=dict(title=dict(text=arg2)), ))
 
     return [trace], '3d-surface', layout
 
@@ -746,9 +746,9 @@ def image(result, titles, verbose=False, **kwargs):
 
     trace = go.Image(z=z)
     layout = go.Layout(
-        title=title,
-        xaxis=dict(title='${}$'.format(arg0)),
-        yaxis=dict(title='${}$'.format(arg1)))
+        title=dict(text=title),
+        xaxis=dict(title=dict(text='${}$'.format(arg0))),
+        yaxis=dict(title=dict(text='${}$'.format(arg1))))
 
     return [trace], '2d-image', layout
 

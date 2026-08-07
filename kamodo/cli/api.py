@@ -22,7 +22,7 @@ import hydra
 from hydra.experimental import compose
 from omegaconf import OmegaConf
 
-import plotly.graph_objs as go
+import plotly.graph_objects as go
 
 try:
     hydra.experimental.initialize(strict=False)

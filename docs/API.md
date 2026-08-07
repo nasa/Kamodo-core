@@ -88,7 +88,7 @@ The following methods allow Kamodo to integrate seemlessly with modern publicati
 
 ### Plot types
 
-As described in [Visualization](../notebooks/Visualization/), Kamodo automatically maps registered functions to certain plot types. All such functions expect the same input variables and return a triplet `[trace], chart_type, layout` where `[trace]` is a list of plotly trace objects.
+As described in the Visualization section, Kamodo automatically maps registered functions to certain plot types. All such functions expect the same input variables and return a triplet `[trace], chart_type, layout` where `[trace]` is a list of plotly trace objects.
 
 ::: kamodo.plotting.get_plot_types_df
     :docstring:

@@ -26,7 +26,8 @@ from sympy import Function
 from sympy import latex, Eq
 from sympy import nsimplify
 from sympy import symbols, Symbol
-from sympy.core.compatibility import reduce, Iterable
+from functools import reduce
+from collections.abc import Iterable
 from sympy.core.function import UndefinedFunction
 from sympy.physics import units
 from sympy.physics import units as sympy_units
@@ -959,7 +960,9 @@ def unify(expr, unit_registry, to_symbol=None, verbose=False):
             print('unify: to_unit {}'.format(to_unit))
         expr_dimensions = get_dimensions(expr_unit)
         to_dimensions = get_dimensions(to_unit)
-        if expr_dimensions.compare(to_dimensions) == 0:
+        expr_deps = dimsys_SI.get_dimensional_dependencies(expr_dimensions)
+        to_deps = dimsys_SI.get_dimensional_dependencies(to_dimensions)
+        if expr_deps == to_deps:
             if verbose:
                 print('unify: {} [{}] -> to_symbol: {}[{}]'.format(
                     expr, expr_unit, to_symbol, to_unit))
@@ -1221,7 +1224,7 @@ def dumps(*args, **kwargs):
 
 def get_undefined_funcs(expr):
     """retrieve an expression's undefined functions"""
-    return expr.atoms(sympy.function.AppliedUndef)
+    return expr.atoms(sympy.core.function.AppliedUndef)
 
 
 def sign_defaults(symbol, expr, composition):

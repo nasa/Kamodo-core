@@ -172,19 +172,3 @@ docker compose up kamodo-py311 # builds and hosts a python-3.11 kamodo notebook 
       - --allow-root
 ```
 
-
-### Hourly (optional)
-
-Consider using [hourly](https://github.com/asherp/hourly) for time tracking your branch. This will allow future developers to see which parts of the code receive the most attention. 
-
-If you're using hourly, you'll want to configure `hourly.yaml` so that your worklog points to a file named after you:
-
-```yaml
-work_log:
-  header_depth: 3
-  filename: worklogs/my_github_username.md
-```
-
-
-
-

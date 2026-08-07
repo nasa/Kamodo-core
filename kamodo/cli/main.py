@@ -1,7 +1,7 @@
 import hydra
 import numpy as np
 from plotly.offline import plot
-import plotly.graph_objs as go
+import plotly.graph_objects as go
 from omegaconf import OmegaConf
 from os import path
 from kamodo import Kamodo, compose

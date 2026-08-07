@@ -1,15 +1,12 @@
 # Kamodo
 
-![Python 3.6](https://img.shields.io/badge/Python-3.6-blue.svg)
-![Python 3.7](https://img.shields.io/badge/Python-3.7-blue.svg)
-![Python 3.8](https://img.shields.io/badge/Python-3.8-blue.svg)
-![Python 3.9](https://img.shields.io/badge/Python-3.9-blue.svg)
 ![Python 3.10](https://img.shields.io/badge/Python-3.10-blue.svg)
 ![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)
+![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)
+![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)
+![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)
 
-
-
-[![codecov](https://codecov.io/gh/asherp/Kamodo/branch/master/graph/badge.svg?token=W1B3L19REF)](https://codecov.io/gh/asherp/Kamodo)
+<!-- [![codecov](https://codecov.io/gh/asherp/Kamodo/branch/master/graph/badge.svg?token=W1B3L19REF)](https://codecov.io/gh/asherp/Kamodo)  -->
 
 Kamodo is an open source CCMC tool for access, interpolation, and visualization of space weather models and data in python.
 Kamodo allows model developers to represent simulation results as mathematical functions which may be manipulated directly by end users.
@@ -113,7 +110,7 @@ Download and install miniconda from [here](https://conda.io/miniconda.html). The
 Create a new environment for kamodo
 
 ```console
-conda create -n kamodo python=3.10
+conda create -n kamodo python=3.14
 conda activate kamodo
 (kamodo) pip install kamodo
 ```
@@ -145,12 +142,13 @@ The following (minimum) requirements are obtained by running `pip install kamodo
 * sympy==1.5.1
 * pandas
 * plotly
+* kaleido
 * pytest
 * hydra-core==0.11.3
 * Flask==1.1.2
 * flask-cors
 * flask-restful==0.3.8
-* antlr4-python3-runtime==4.7
+* antlr4-python3-runtime>=4.11,<4.12
 * python-forge
 * requests
 * incremental
@@ -162,12 +160,6 @@ The antlr package may be necessary for rendering latex in a notebook
 
 ```sh
 conda install antlr-python-runtime
-```
-
-Plotly-orca may be needed for proper image export
-
-```sh
-conda install -c plotly plotly-orca (for writing images)
 ```
 
 

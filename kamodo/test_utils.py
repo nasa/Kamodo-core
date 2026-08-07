@@ -339,7 +339,7 @@ def test_serialize_np():
     assert (x_ == x).all()
 
 def test_serialize_pd():
-    t = pd.date_range('Jan 1, 2021', 'Jan 11, 2021', freq='H')
+    t = pd.date_range('Jan 1, 2021', 'Jan 11, 2021', freq='h')
     
     t_json = json.dumps(t, default=serialize)
     t_ = json.loads(t_json, object_hook=deserialize)
@@ -371,7 +371,7 @@ def test_serialize_generator():
             assert (v == f__defaults[k]).all()
 
 def test_serialize_generator_pd():
-    t = pd.date_range('Jan 1, 2021', 'Jan 11, 2021', freq='H')
+    t = pd.date_range('Jan 1, 2021', 'Jan 11, 2021', freq='h')
 
     gent = (lambda t=t: (t - t0).total_seconds() for t0 in t[::10])
 
