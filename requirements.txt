@@ -1,0 +1,6 @@
+mkdocs
+mkdocs-jupyter
+mknotebooks
+mkautodoc
+python-markdown-math
+markdown_include
