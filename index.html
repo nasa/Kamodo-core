@@ -265,11 +265,16 @@ From here on, anything you install will be isolated to the <code>kamodo</code> e
 pip<span class="w"> </span>install<span class="w"> </span>pytest-cov
 </code></pre></div>
 
-<p>Then, from the base of the git repo:</p>
-<div class="codehilite"><pre><span></span><code>pytest<span class="w"> </span>--cov<span class="w"> </span>kamodo.kamodo<span class="w"> </span>--cov<span class="w"> </span>kamodo.util<span class="w"> </span>--cov<span class="w"> </span>plotting<span class="w"> </span>kamodo/test_plotting.py<span class="w"> </span>kamodo/test_kamodo.py<span class="w"> </span>kamodo/test_utils.py
+<p>Then, from the base of the git repo, run tests</p>
+<div class="codehilite"><pre><span></span><code>pytest<span class="w"> </span>tests/test_*.py
 </code></pre></div>
 
-<p>This will generate a test report and coverage of the <code>kamodo</code> module.</p>
+<p>or check code coverage with</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">PYTHONPATH</span><span class="o">=</span>.<span class="w"> </span>coverage<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/test_*.py
+coverage<span class="w"> </span>report<span class="w"> </span>-m
+</code></pre></div>
+
+<p>Run tests locally prior to pushing.</p>
 <p>To run RPC tests, you must first generate a self-signed certificate.</p>
 <div class="codehilite"><pre><span></span><code>python<span class="w"> </span>kamodo/rpc/gen_self_signed_cert.py<span class="w"> </span>certfile
 <span class="c1"># certfile.key and certfile.cert will be placed in your local directory</span>
@@ -324,5 +329,5 @@ pytest<span class="w"> </span>kamodo/rpc/test_rpc_threaded.py
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2026-08-07 15:34:19.498036+00:00
+Build Date UTC : 2026-08-07 19:08:56.347526+00:00
 -->
