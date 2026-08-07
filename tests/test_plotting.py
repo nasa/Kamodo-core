@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 from kamodo import Kamodo, kamodofy
-from .plotting import scatter_plot, line_plot, vector_plot, contour_plot, surface, plane, tri_surface_plot, \
+from kamodo.plotting import scatter_plot, line_plot, vector_plot, contour_plot, surface, plane, tri_surface_plot, \
     get_arg_shapes, plot_types, plot_dict, image, symbolic_shape
 
 

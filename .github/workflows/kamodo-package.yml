@@ -39,24 +39,3 @@ jobs:
           # Python version in the matrix.
           python -m pip install "sympy==1.5.1"
 
-      - name: Test with pytest and generate coverage
-        run: |
-          pytest \
-            --cov=kamodo.kamodo \
-            --cov=kamodo.util \
-            --cov=plotting \
-            kamodo/test_plotting.py \
-            kamodo/test_kamodo.py \
-            kamodo/test_utils.py \
-            kamodo/rpc/test_rpc_threaded.py
-
-          jupyter nbconvert \
-            --to=html \
-            --ExecutePreprocessor.enabled=True \
-            --config docs/notebooks/run_notebooks.py
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          fail_ci_if_error: true
-

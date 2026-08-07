@@ -10,11 +10,11 @@ from kamodo.util import kamodofy, gridify, sort_symbols, valid_args, eval_func, 
     concat_solution, get_unit_quantity, substr_replace, beautify_latex, arg_to_latex, simulate, pad_nan, \
     pointlike, solve, event, is_function
 
-from .util import serialize, deserialize
+from kamodo.util import serialize, deserialize
 import pandas as pd
 import json
-from .util import LambdaGenerator
-from .util import curry, partial, get_args
+from kamodo.util import LambdaGenerator
+from kamodo.util import curry, partial, get_args
 
 @kamodofy
 def rho(x=np.array([3, 4, 5])):

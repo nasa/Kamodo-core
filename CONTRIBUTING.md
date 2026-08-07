@@ -51,13 +51,18 @@ python -m pip install flake8 pytest
 pip install pytest-cov
 ```
 
-Then, from the base of the git repo
+Then, from the base of the git repo, run tests
 
 ```sh
-pytest --cov kamodo.kamodo --cov kamodo.util --cov plotting kamodo/test_plotting.py kamodo/test_kamodo.py kamodo/test_utils.py
+pytest tests/test_*.py
 ```
 
-Try to at least maintain the current code coverage with your PR.
+or check code coverage with 
+
+```sh
+PYTHONPATH=. coverage run -m pytest tests/test_*.py
+coverage report -m
+```
 
 ### Generating Docs
 

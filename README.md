@@ -172,13 +172,20 @@ python -m pip install flake8 pytest
 pip install pytest-cov
 ```
 
-Then, from the base of the git repo:
+Then, from the base of the git repo, run tests
 
 ```sh
-pytest --cov kamodo.kamodo --cov kamodo.util --cov plotting kamodo/test_plotting.py kamodo/test_kamodo.py kamodo/test_utils.py
+pytest tests/test_*.py
 ```
 
-This will generate a test report and coverage of the `kamodo` module.
+or check code coverage with
+
+```sh
+PYTHONPATH=. coverage run -m pytest tests/test_*.py
+coverage report -m
+```
+
+Run tests locally prior to pushing.
 
 To run RPC tests, you must first generate a self-signed certificate.
 

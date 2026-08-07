@@ -18,11 +18,11 @@ from sympy.core.function import UndefinedFunction
 from kamodo import Kamodo, get_unit, kamodofy
 from kamodo import from_kamodo, compose
 from kamodo import get_abbrev
-from .util import get_arg_units
-from .util import get_kamodo_unit_system
+from kamodo.util import get_arg_units
+from kamodo.util import get_kamodo_unit_system
 
 from kamodo import extract_units
-from .util import get_unit_quantity, convert_unit_to
+from kamodo.util import get_unit_quantity, convert_unit_to
 
 
 
@@ -428,6 +428,7 @@ def test_unit_registry():
 
 def test_to_latex():
     warnings.simplefilter('error')
+    warnings.filterwarnings('ignore', category=DeprecationWarning, module='forge')
     kamodo = Kamodo(f='x**2', verbose=True)
     assert str(kamodo.to_latex(mode='inline')) == r'$f{\left(x \right)} = x^{2}$'
     kamodo = Kamodo(g='x', verbose=True)
