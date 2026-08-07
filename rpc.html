@@ -68,7 +68,7 @@
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="rpc.html">RPC</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">RPC</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#configuring-a-kamodo-server">Configuring a Kamodo server</a>
     </li>
@@ -104,7 +104,7 @@
       <div class="wy-nav-content">
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">RPC</li>
     <li class="wy-breadcrumbs-aside">
     </li>
@@ -198,7 +198,7 @@
 <h2 id="starting-a-client">Starting a client<a class="headerlink" href="#starting-a-client" title="Permanent link">&para;</a></h2>
 <p>Since the root of the repo is mapped into the container, we can access the cert from the host <code>selfsigned.cert</code>.</p>
 <p>Open a separate terminal and connect to the container from your host system (use the same directory where <code>selfsigned.cert</code> i.e. the root of the mounted kamodo-core repo):</p>
-<div class="codehilite"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">kamodo</span> <span class="kn">import</span> <span class="n">KamodoClient</span>
+<div class="codehilite"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span><span class="w"> </span><span class="nn">kamodo</span><span class="w"> </span><span class="kn">import</span> <span class="n">KamodoClient</span>
 <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">k</span> <span class="o">=</span> <span class="n">KamodoClient</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">60001</span><span class="p">)</span>
 <span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">k</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
 <span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="mi">19</span> <span class="c1"># (5)**2-(5)-1</span>

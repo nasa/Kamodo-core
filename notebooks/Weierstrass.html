@@ -96,7 +96,7 @@
       <div class="wy-nav-content">
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Weierstrass</li>
     <li class="wy-breadcrumbs-aside">
     </li>
@@ -106,15 +106,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">kamodo</span> <span class="kn">import</span> <span class="n">Kamodo</span><span class="p">,</span> <span class="n">kamodofy</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+                <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">kamodo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Kamodo</span><span class="p">,</span> <span class="n">kamodofy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </code></pre></div>
 
 <div class="codehilite"><pre><span></span><code><span class="nd">@kamodofy</span><span class="p">(</span>
     <span class="n">equation</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\sum_{n=0}^</span><span class="si">{500}</span><span class="s2"> (1/2)^n cos(3^n \pi x)&quot;</span><span class="p">,</span>
     <span class="n">citation</span><span class="o">=</span><span class="s1">&#39;Weierstrass, K. (1872). Uber continuirliche functionen eines reellen arguments, die fur keinen worth des letzteren einen bestimmten differentailqutienten besitzen, Akademievortrag. Math. Werke, 71-74.&#39;</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">weierstrass</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weierstrass</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Weierstrass  function</span>
 <span class="sd">    A continuous non-differentiable </span>
