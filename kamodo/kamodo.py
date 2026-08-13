@@ -31,16 +31,13 @@ import requests
 from plotly.subplots import make_subplots
 
 import sympy
-from sympy import Eq, Pow
-from sympy import Expr
-from sympy import Symbol, symbols, Function
-from sympy import lambdify
-from sympy import latex
+from sympy import Eq, Pow, Expr, Symbol, symbols, Function, lambdify, latex, Integer, S
 from sympy.abc import _clash
 from sympy.core.function import UndefinedFunction
 from sympy.parsing.latex import parse_latex
 from sympy.physics import units as sympy_units
-from sympy.physics.units import Dimension
+from sympy.physics.units import Dimension, Quantity
+dimensionless = Dimension('dimensionless')
 
 from plotting import get_ranges
 from plotting import plot_dict, get_arg_shapes, symbolic_shape
@@ -65,23 +62,47 @@ from util import sign_defaults
 from util import simulate
 from util import unify, get_abbrev, get_expr_unit
 from util import unit_subs
-
-# try:
-#     from sympy.parsing.sympy_parser import parse_expr
-# except ImportError:  # may occur for certain versions of sympy
-#     from sympy import sympify as parse_expr
-# from IPython.display import Latex
-# -
+from util import safe_sympify
 
 _clash['rad'] = Symbol('rad')
 _clash['deg'] = Symbol('deg')
 
 
 def parse_expr(*args, **kwargs):
+    """Safely converts string/object inputs using safe_sympify while preserving function syntax."""
     try:
-        return sympy.sympify(*args, **kwargs)
-    except:
-        raise NameError('cannot parse {}, {}'.format(args, kwargs))
+        # Intercept and map locals/local_dict kwargs for compatibility
+        local_dict = kwargs.pop('locals', kwargs.pop('local_dict', None))
+        
+        expr_str = args[0] if (args and isinstance(args[0], str)) else ""
+        
+        # Dynamically build clean_locals based on how the token is used in the string
+        clean_locals = {}
+        if local_dict:
+            for k, v in local_dict.items():
+                if isinstance(k, str):
+                    if hasattr(v, 'exec_module'):  # Skip imported modules
+                        continue
+                    
+                    # If the token is followed by a parenthesis, SymPy AST needs a Function class.
+                    # Otherwise, it needs a Symbol to support algebraic operators like '+' and '/'.
+                    if expr_str and re.search(r'\b' + re.escape(k) + r'\s*\(', expr_str):
+                        clean_locals[k] = sympy.Function(k)
+                    else:
+                        clean_locals[k] = sympy.Symbol(k)
+                else:
+                    clean_locals[k] = v
+
+        if expr_str:
+            # If parsing a function call/signature like 'f(x)', fallback to standard sympify/evaluate=False
+            if '(' in expr_str and ')' in expr_str:
+                return sympy.sympify(expr_str, locals=clean_locals, evaluate=False)
+        
+        # Otherwise, use safe_sympify for standard math expressions (RHS formulas)
+        expr = args[0] if args else None
+        return safe_sympify(expr, local_dict=clean_locals)
+    except Exception as e:
+        raise NameError('cannot parse {}, {}'.format(args, kwargs)) from e
 
 
 def get_unit_quantities():
@@ -100,7 +121,7 @@ def clean_unit(unit_str):
 
 def get_unit(unit_str, unit_subs=unit_subs):
     """get the unit quantity corresponding to this string
-    unit_subs should contain a dictonary {symbol: quantity} of custom units not available in sympy"""
+    unit_subs should contain a dictionary {symbol: quantity} of custom units not available in sympy"""
 
     unit_str = clean_unit(unit_str)
     units = get_unit_quantities()
@@ -108,20 +129,40 @@ def get_unit(unit_str, unit_subs=unit_subs):
     if unit_subs is not None:
         units.update(unit_subs)
 
+    # Empty unit string represents dimensionless
     if len(unit_str) == 0:
-        return Dimension(1)
-    unit_expr = parse_expr(unit_str.replace('^', '**'), locals=_clash)
+        return dimensionless
+
+    parse_locals = dict(_clash)
+    
+    # Ensure all keys are strings so safe_sympify recognizes the tokens 
+    # and doesn't split them via implicit multiplication
+    for k, v in units.items():
+        parse_locals[str(k)] = v
+
     try:
-        unit = unit_expr.subs(units)
-    except:
+        # CHANGED: Use safe_sympify with parse_locals
+        unit_expr = safe_sympify(unit_str.replace('^', '**'), local_dict=parse_locals)
+    except Exception as e:
         raise NameError(
             'something wrong with unit str [{}], type {}, {}'.format(
-                unit_str, type(unit_str), unit_expr))
+                unit_str, type(unit_str), unit_str)
+        ) from e
+
+    try:
+        unit = unit_expr.subs(units)
+    except Exception as e:
+        raise NameError(
+            'something wrong with unit substitution [{}], type {}, {}'.format(
+                unit_str, type(unit_str), unit_expr)
+        ) from e
+
     try:
         assert len(unit.free_symbols) == 0
-    except:
+    except AssertionError:
         raise NameError("Unsupported unit: {} {} {}".format(
             unit_str, type(unit_str), unit.free_symbols))
+
     return unit
 
 
@@ -340,14 +381,34 @@ def expr_to_symbol(expr, args):
         return expr
 
 
-def parse_lhs(lhs, local_dict, verbose):
+def parse_lhs(lhs, local_dict, verbose): 
     """parse the left-hand-side
     returns: symbol, arguments, units, parsed_expr
-    """
+    """     
     lhs, unit_dict = extract_units(lhs)
     if lhs in reserved_names:
         raise NameError('{} is a reserved name'.format(lhs))
-    parsed = parse_expr(lhs)
+    
+    # Sanitize local_dict for LHS parsing
+    clean_locals = {}
+    if local_dict:
+        for k, v in local_dict.items():
+            if isinstance(k, str):
+                if hasattr(v, 'exec_module'):  # Skip imported modules
+                    continue
+                
+                # Dynamically determine if the token is acting as a Function or a Symbol in the LHS string
+                if re.search(r'\b' + re.escape(k) + r'\s*\(', lhs):
+                    clean_locals[k] = sympy.Function(k)
+                else:
+                    clean_locals[k] = sympy.Symbol(k)
+
+    parsed = sympy.sympify(lhs, locals=clean_locals, evaluate=False)
+    
+    # If lhs was a single name like 'f', ensure parsed is a Symbol, not a Function class
+    if isinstance(parsed, type) and issubclass(parsed, sympy.Function):
+        parsed = sympy.Symbol(parsed.__name__)
+
     args = args_from_dict(parsed, local_dict, verbose)
     symbol = expr_to_symbol(parsed, args)
     return symbol, args, unit_dict, parsed
@@ -361,7 +422,8 @@ def parse_rhs(rhs, is_latex, local_dict):
         expr = parse_latex(rhs).subs(local_dict)
     else:
         try:
-            expr = parse_expr(rhs).subs(local_dict)
+            # Pass local_dict into parse_expr so it doesn't split registered names
+            expr = parse_expr(rhs, local_dict=local_dict).subs(local_dict)
         except SyntaxError:
             print('cannot parse {} with {}'.format(rhs, local_dict))
             raise
@@ -525,25 +587,22 @@ class Kamodo(UserDict):
         return symbol
 
     def validate_function(self, lhs_expr, rhs_expr):
-        assert lhs_expr.free_symbols == rhs_expr.free_symbols
+        lhs_symbols = set(getattr(lhs_expr, 'free_symbols', []) or [])
+        rhs_symbols = set(getattr(rhs_expr, 'free_symbols', []) or [])
+        assert lhs_symbols == rhs_symbols
 
     def vectorize_function(self, symbol, rhs_expr, composition):
-        try:
-            func = lambdify(symbol.args, rhs_expr, modules=['numexpr'])
-            if self.verbose:
-                print(
-                    'lambda {} = {} labmdified with numexpr'.format(symbol.args,
-                                                                    rhs_expr))
-        except:  # numexpr not installed
-            func = lambdify(symbol.args, rhs_expr,
-                            modules=['numpy', composition])
+        args = list(symbol.args) if getattr(symbol, 'args', None) else [symbol]
 
-            if self.verbose:
-                print(
-                    'lambda {} = {} lambdified with numpy and composition:'.format(
-                        symbol.args, rhs_expr))
-                for k, v in composition.items():
-                    print('\t', k, v)
+        func = lambdify(args, rhs_expr, modules=['numpy', composition])
+
+        if self.verbose:
+            print(
+                'lambda {} = {} lambdified with numpy and composition:'.format(
+                    symbol.args, rhs_expr))
+            for k, v in composition.items():
+                print('\t', k, v)
+
         signature, defaults = sign_defaults(symbol, rhs_expr, composition)
 
         return signature(func)
@@ -575,7 +634,7 @@ class Kamodo(UserDict):
             print('unit str {}'.format(unit_str))
 
         if rhs_expr is None:
-            lambda_ = symbols('lambda', cls=UndefinedFunction)
+            lambda_ = Function('lambda') # Updated to Function
             rhs_expr = lambda_(*symbol.args)
 
         self.signatures[str(type(symbol))] = dict(
@@ -654,7 +713,7 @@ class Kamodo(UserDict):
         self.register_symbol(lhs_symbol)
 
     def __setitem__(self, sym_name, input_expr):
-        """Assigns a function or expression to a new symbol, performing
+        r"""Assigns a function or expression to a new symbol, performing
         automatic function composition and inserting unit conversions where appropriate.
 
         * ** sym_name ** - function symbol to associate with right-hand-side in one of the following formats:
@@ -686,9 +745,9 @@ class Kamodo(UserDict):
 
         The above `kobj` will render in a Jupyter notebook like this:
 
-        $$\\operatorname{radius}{\\left(r \\right)}[m] = r$$
+        $$\operatorname{radius}{\left(r \right)}[m] = r$$
         
-        $$\\operatorname{area}{\\left(r \\right)}[cm^{2}] = 10000 \\pi \\operatorname{radius}^{2}{\\left(r \\right)}$$
+        $$\operatorname{area}{\left(r \right)}[cm^{2}] = 10000 \pi \operatorname{radius}^{2}{\left(r \right)}$$
 
         Kamodo will raise an error if left-hand-side units are incompatible with the right-hand-side expression
         
@@ -703,7 +762,7 @@ class Kamodo(UserDict):
         
         output:
         
-        $$\\text{cannot convert area(x) [centimeter**2] length**2 to g(x)[kilogram] mass}$$
+        $$\text{cannot convert area(x) [centimeter**2] length**2 to g(x)[kilogram] mass}$$
         
 
         """
@@ -799,10 +858,10 @@ class Kamodo(UserDict):
                     print('about to unify lhs_units {} {} with {}'.format(
                         lhs_units, type(lhs_units), rhs))
 
+                # Use the already instantiated `symbol` instead of string re-parsing
                 expr = unify(
-                    Eq(parse_expr(sym_name), rhs),
+                    Eq(symbol, rhs),
                     self.unit_registry,
-                    # to_symbol = symbol,
                     verbose=self.verbose)
                 rhs_expr = expr.rhs
             if self.verbose:
@@ -825,7 +884,7 @@ class Kamodo(UserDict):
                 for k, v in self.unit_registry.items():
                     print('\t{}: {}'.format(k, v))
 
-            rhs_args = rhs_expr.free_symbols
+            rhs_args = getattr(rhs_expr, 'free_symbols', set()) or set()
 
             symbol = self.check_or_replace_symbol(symbol, rhs_args, rhs_expr)
             self.validate_function(symbol, rhs_expr)
@@ -890,7 +949,7 @@ class Kamodo(UserDict):
             super(Kamodo, self).__setitem__(type(symbol), self[symbol])
 
     def __getitem__(self, key):
-        """Given a symbol string, retrieves the corresponding function.
+        r"""Given a symbol string, retrieves the corresponding function.
 
         input: **key** - string or function symbol
 
@@ -937,7 +996,7 @@ class Kamodo(UserDict):
         return False
 
     def __getattr__(self, name):
-        """
+        r"""
 
         Retrieves a given function as an attribute.
         
@@ -953,7 +1012,7 @@ class Kamodo(UserDict):
         ```
         The above renders as follows in a jupyter notebook
 
-        $f{\\left(x \\right)} = x^{2} - x - 1$
+        $f{\left(x \right)} = x^{2} - x - 1$
 
         """
         try:
@@ -1060,11 +1119,9 @@ class Kamodo(UserDict):
         if isinstance(rhs, str):
             latex_eq_rhs = rhs
         elif hasattr(rhs, '__call__') | (rhs is None):
-            lambda_ = symbols('lambda', cls=UndefinedFunction)
-            # latex_eq = latex(Eq(lhs, lambda_(*lhs.args)), mode=mode)
+            lambda_ = Function('lambda') # Updated to Function
             latex_eq_rhs = latex(lambda_(*lhs.args))  # no $$
         else:
-            # latex_eq = latex(Eq(lhs, rhs), mode=mode)
             latex_eq_rhs = latex(rhs)  # no $$ delimiter
 
         if len(str(units)) > 0:
@@ -1084,7 +1141,7 @@ class Kamodo(UserDict):
         """Generate list of LaTeX-formated formulas
 
         ** inputs **:
-
+            
         * keys - (optional) list(str) of registered functions to generate LaTeX from
 
         * mode - (optional) string determines to wrap formulas
@@ -1093,11 +1150,13 @@ class Kamodo(UserDict):
             * 'inline': wraps formulas in dollar signs
 
         ** returns **: LaTeX-formated string
-        
+                    
         Note: This function does not need to be called directly for rendering in jupyter
         because the _repr_latex_ method is automatically attached.
 
         """
+        import re
+
         if keys is None:
             keys = list(self.signatures.keys())
 
@@ -1112,10 +1171,13 @@ class Kamodo(UserDict):
 
         repr_latex = " ".join(funcs_latex)
 
+        # Clean up SymPy Dimension(dimensionless) leaking into function signatures
+        repr_latex = re.sub(r'\\operatorname\{Dimension\}\s*(\\left\()?dimensionless(\\right\游)?', '', repr_latex)
+
         return beautify_latex(repr_latex).encode('utf-8').decode()
 
     def _repr_latex_(self):
-        """Provides notebook rendering of kamodo object's registered functions.
+        r"""Provides notebook rendering of kamodo object's registered functions.
 
         ** inputs ** - N/A
 
@@ -1130,7 +1192,7 @@ class Kamodo(UserDict):
 
         When placed on a line by itself, the above object will be rendered by jupyter notebooks like this:
 
-        \\begin{equation}f{\\left(x \\right)} = x^{2} - x - 1\\end{equation}
+        \begin{equation}f{\left(x \right)} = x^{2} - x - 1\end{equation}
 
         More on the _repr_latex_ method can be found [here](https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html) 
         
@@ -2026,3 +2088,4 @@ def yaml_loader():
     loader.add_constructor("!Kamodo", kamodo_constructor)
     loader.add_constructor("!KamodoClient", kamodo_client_constructor)
     return loader
+

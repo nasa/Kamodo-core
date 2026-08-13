@@ -21,22 +21,54 @@ from decorator import decorate
 import shlex
 import subprocess
 from scipy.integrate import solve_ivp
-from sympy import Add, Mul, Pow, Tuple, sympify
+from sympy import Add, Mul, Pow, Tuple, sympify, SympifyError
 from sympy import Function
 from sympy import latex, Eq
 from sympy import nsimplify
 from sympy import symbols, Symbol
 from functools import reduce
 from collections.abc import Iterable
-from sympy.core.function import UndefinedFunction
+from sympy.core.function import UndefinedFunction, AppliedUndef
 from sympy.physics import units
 from sympy.physics import units as sympy_units
 from sympy.physics.units import Dimension
 from sympy.physics.units import UnitSystem
 from sympy.physics.units.quantities import Quantity
 from sympy.physics.units.systems.si import dimsys_SI
-from sympy.physics.units.util import _get_conversion_matrix_for_expr
+from sympy.physics.units import convert_to
 from sympy.utilities.autowrap import ufuncify
+from sympy.parsing.sympy_parser import (
+    parse_expr,
+    standard_transformations
+)
+
+def safe_sympify(expr, local_dict=None):
+    """Safely converts strings, expressions, or objects into SymPy objects."""
+    if expr is None:
+        return None
+        
+    # Sanitize locals dictionary if provided
+    clean_locals = {}
+    if local_dict:
+        for k, v in local_dict.items():
+            clean_locals[k] = Symbol(v) if isinstance(v, str) else v
+
+    # Parse string inputs safely without implicit multiplication
+    if isinstance(expr, str):
+        # Apply standard transformations only
+        transformations = standard_transformations
+        try:
+            return parse_expr(expr, local_dict=clean_locals, transformations=transformations)
+        except Exception:
+            return sympify(expr, locals=clean_locals)
+
+    # Convert existing objects/expressions safely
+    try:
+        return sympify(expr, locals=clean_locals)
+    except SympifyError:
+        if hasattr(expr, '__name__'):
+            return Symbol(expr.__name__)
+        return Symbol(str(expr))
 
 
 def get_unit_quantity(name, base, scale_factor, abbrev=None, unit_system='SI'):
@@ -79,7 +111,7 @@ unit_list = ['m', 's', 'g', 'A', 'K', 'radian', 'sr', 'cd', 'mole', 'eV', 'Pa',
 
 # list of SI units included in sympy (likely not complete)
 
-lambda_ = symbols('lambda', cls=UndefinedFunction)
+lambda_ = Function('lambda') # Updated to Function
 
 for item in unit_list:
     unit_item = getattr(sympy_units, item)
@@ -125,9 +157,10 @@ kamodo_unit_system = get_kamodo_unit_system()
 def get_ufunc(expr, variable_map):
     """Numerically optimize expression"""
 
-    expr = sympify(expr, locals=variable_map)
-    func = ufuncify(expr.free_symbols, expr)
-    formula = 'f{} = {}'.format(tuple(expr.free_symbols), expr)
+    expr = safe_sympify(expr, local_dict=variable_map)
+    free_syms = tuple(getattr(expr, 'free_symbols', []) or [])
+    func = ufuncify(free_syms, expr)
+    formula = 'f{} = {}'.format(free_syms, expr)
     return func, formula
 
 
@@ -269,11 +302,9 @@ def kamodofy(
         if equation is not None:
             latex_str = equation.strip("$")
             f._repr_latex_ = lambda: latex_str
-        # f._repr_latex_ = lambda : "${}$".format(latex(parse_latex(latex_str)))
         else:
-            f_ = symbols(f.__name__, cls=UndefinedFunction)
+            f_ = Function(f.__name__) # Updated to Function
             lhs = f_.__call__(*symbols(getfullargspec(f).args))
-            # lambda_ = symbols('lambda', cls=UndefinedFunction)
             lambda_ = Function('lambda')
             latex_eq = latex(Eq(lhs, lambda_(*lhs.args)))
             f._repr_latex_ = lambda: "${}$".format(latex(latex_eq))
@@ -738,7 +769,7 @@ def convert_unit_to(expr, target_units, unit_system=kamodo_unit_system,
     # if type(type(expr)) is UndefinedFunction:
     if is_function(expr):
         # print('undefined input expr:{}'.format(expr))
-        return nsimplify(expr, rational=True)
+        return nsimplify(expr, rational=True, tolerance=1e-15)
 
     if isinstance(expr, Add):
         return Add.fromiter(
@@ -755,43 +786,41 @@ def convert_unit_to(expr, target_units, unit_system=kamodo_unit_system,
             raise OSError('problem converting {} to {}\n{}'.format(
                 expr, target_units, unit_system))
 
-    def get_total_scale_factor(expr):
-        if isinstance(expr, Mul):
-            return reduce(lambda x, y: x * y,
-                          [get_total_scale_factor(i) for i in expr.args])
-        elif isinstance(expr, Pow):
-            return get_total_scale_factor(expr.base) ** expr.exp
-        elif isinstance(expr, Quantity):
-            return unit_system.get_quantity_scale_factor(expr)
-        return expr
-
     if expr == target_units:
         return expr
 
-    depmat = _get_conversion_matrix_for_expr(expr, target_units, unit_system)
-    if depmat is None:
+    try:
+        # SymPy's public convert_to handles the matrix scaling and factorization natively
+        result = convert_to(expr, target_units, unit_system)
+    except Exception:
         if raise_errors:
-            raise NameError(
-                'cannot convert {} to {} {}'.format(expr, target_units,
-                                                    unit_system))
-        return nsimplify(expr, rational=True)
+            raise NameError('cannot convert {} to {} {}'.format(expr, target_units, unit_system))
+        return nsimplify(expr, rational=True, tolerance=1e-15)
 
-    expr_scale_factor = get_total_scale_factor(expr)
-    result = expr_scale_factor * Mul.fromiter(
-        (1 / get_total_scale_factor(u) * u) ** p for u, p in
-        zip(target_units, depmat))
-    return nsimplify(result, rational=True)
+    # Verify the conversion successfully removed non-target units.
+    # Target units might be composite (like meter/second), so we must extract their base Quantity atoms.
+    result_quantities = result.atoms(Quantity)
+    target_quantities = set()
+    for t in target_units:
+        target_quantities.update(sympify(t).atoms(Quantity))
+        
+    if not result_quantities.issubset(target_quantities):
+        if raise_errors:
+            raise NameError('cannot convert {} to {} {}'.format(expr, target_units, unit_system))
+        return nsimplify(expr, rational=True, tolerance=1e-15)
+        
+    return nsimplify(result, rational=True, tolerance=1e-15)
 
 
 def get_expr_unit(expr, unit_registry, verbose=False):
     '''Get units from an expression'''
     if is_function(expr):
         for func in unit_registry:
-            if type(expr) == type(func):
+            # Fallback to class name check for dynamic SymPy 1.13+ functions
+            if type(expr) == type(func) or type(expr).__name__ == type(func).__name__:
                 # b(a) = b(x)
                 if verbose:
-                    print('get_expr_unit: found match {} for {}'.format(func,
-                                                                        expr))
+                    print('get_expr_unit: found match {} for {}'.format(func, expr))
                 # {f(x): f(cm), f(cm): kg}
                 func_units = unit_registry[func]
                 if func_units in unit_registry:
@@ -811,6 +840,18 @@ def get_expr_unit(expr, unit_registry, verbose=False):
         else:
             return None
 
+    if isinstance(expr, Pow):
+        base, exp = expr.as_base_exp()
+        base_unit = get_expr_unit(base, unit_registry, verbose)
+        if base_unit is not None:
+            return Pow(base_unit, exp)
+        return None
+
+    if isinstance(expr, Add):
+        # Units across an Add must be dimensionally equivalent. 
+        # Recursively evaluate and return the unit of the first term.
+        return get_expr_unit(expr.args[0], unit_registry, verbose)
+
     if len(unit_registry) > 0:
         expr_unit = expr.subs(
             unit_registry, simultaneous=False).subs(
@@ -818,7 +859,8 @@ def get_expr_unit(expr, unit_registry, verbose=False):
     else:
         expr_unit = expr
 
-    if len(expr_unit.free_symbols) > 0:
+    free_syms = getattr(expr_unit, 'free_symbols', set()) or set()
+    if len(free_syms) > 0:
         return None
 
     if isinstance(expr_unit, Add):
@@ -828,9 +870,6 @@ def get_expr_unit(expr, unit_registry, verbose=False):
         result = arg_0
     else:
         result = expr_unit
-
-    # if len(result.free_symbols) > 0:
-    #     return None
 
     return get_base_unit(result)
 
@@ -906,15 +945,18 @@ def unify(expr, unit_registry, to_symbol=None, verbose=False):
 
     expr_unit = get_expr_unit(expr, unit_registry, verbose)
 
+    expr_free = set(getattr(expr, 'free_symbols', []) or [])
+    to_symbol_free = set(getattr(to_symbol, 'free_symbols', []) or [])
+
     if verbose:
         print('unify: {} unit {}'.format(expr, expr_unit))
-        print('unify: {} symbols {}'.format(expr, expr.free_symbols))
-        print('unify: {} symbols {}'.format(to_symbol, to_symbol.free_symbols))
+        print('unify: {} symbols {}'.format(expr, expr_free))
+        print('unify: {} symbols {}'.format(to_symbol, to_symbol_free))
     try:
-        assert expr.free_symbols.issubset(to_symbol.free_symbols)
+        assert expr_free.issubset(to_symbol_free)
     except:
         raise NameError("{} arguments not in {}".format(
-            expr.free_symbols, to_symbol.free_symbols))
+            expr_free, to_symbol_free))
 
     if is_function(expr):
         if verbose:
@@ -922,17 +964,15 @@ def unify(expr, unit_registry, to_symbol=None, verbose=False):
         if to_symbol is not None:
             if verbose:
                 print('\nunify: to_symbol args: {}'.format(to_symbol.args))
-                print('unify: to_symbol free symbols: {}'.format(
-                    to_symbol.free_symbols))
+                print('unify: to_symbol free symbols: {}'.format(to_symbol.free_symbols))
                 print('unify: expr args: {}'.format(expr.args))
                 print('unify: expr free symbols: {}'.format(expr.free_symbols))
 
             for k, v in unit_registry.items():
-                if isinstance(expr, type(k)):
+                if isinstance(expr, type(k)) or type(expr).__name__ == type(k).__name__:
                     if len(k.free_symbols) > 0:
                         if verbose:
-                            print('unify: found matching {} -> {}'.format(expr,
-                                                                          k))
+                            print('unify: found matching {} -> {}'.format(expr, k))
                         arg_units = get_arg_units(k, unit_registry)
                         if verbose:
                             print('unify: func units:', arg_units)
@@ -1057,9 +1097,11 @@ def is_function(expr):
         symbols('f', cls=UndefinedFunction): True
         x: False
     """
-    if isinstance(expr, UndefinedFunction):
+    if isinstance(expr, (UndefinedFunction, AppliedUndef)):
         return True
-    return isinstance(type(expr), UndefinedFunction)
+    if isinstance(type(expr), UndefinedFunction):
+        return True
+    return False
 
 
 class NumpyEncoder(json.JSONEncoder):
