@@ -8,7 +8,6 @@ from sympy.core.function import UndefinedFunction
 from kamodo import get_defaults, getfullargspec
 from kamodo import serialize, deserialize
 
-
 import flask
 from flask import Flask, render_template, jsonify
 from flask_cors import CORS, cross_origin
@@ -18,50 +17,32 @@ from flask import request
 from io import StringIO
 import json
 
-import hydra
-from hydra.experimental import compose
-from omegaconf import OmegaConf
+import yaml
+import importlib
 
 import plotly.graph_objects as go
 
-try:
-    hydra.experimental.initialize(strict=False)
-except:
-    pass
-
-from kamodo.util import NumpyArrayEncoder
+def instantiate(conf):
+    """Minimal native replacement for hydra.utils.instantiate"""
+    if not isinstance(conf, dict) or '_target_' not in conf:
+        return conf
+    conf_copy = dict(conf)
+    target = conf_copy.pop('_target_')
+    module_name, class_name = target.rsplit('.', 1)
+    module = importlib.import_module(module_name)
+    obj = getattr(module, class_name)
+    return obj(**conf_copy)
 
 from collections import defaultdict
 from kamodo import from_kamodo
-
 
 import logging
 # log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
 
-
 app = Flask(__name__)
 
 CORS(app) # enable Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
-
-
-def config_override(cfg):
-    """Overrides with user-supplied configuration
-
-    kamodo will override its configuration using
-    kamodo.yaml if it is in the current working directory
-    or users can set an override config:
-        config_override=path/to/myconfig.yaml
-    """
-    if cfg.config_override is not None:
-        override_path = hydra.utils.to_absolute_path(cfg.config_override)
-        if path.exists(override_path):
-            override_conf = OmegaConf.load(override_path)
-            # merge overrides first input with second
-            cfg = OmegaConf.merge(cfg, override_conf)
-        else:
-            print('no such path: {}\n ..ignoring'.format(override_path))
-    return cfg
 
 
 def get_api(app):
@@ -78,64 +59,62 @@ user_models = {}
 def main():
     """main entrypoint"""
 
-    cfg = compose('conf/kamodo.yaml')
+    # 1. Load native YAML config instead of Hydra
+    conf_path = 'conf/kamodo.yaml'
+    if not path.exists(conf_path):
+        print(f"Warning: Configuration file {conf_path} not found.")
+        cfg = {'flask': {'host': '0.0.0.0', 'port': 5000}, 'models': {}}
+    else:
+        with open(conf_path, 'r') as f:
+            cfg = yaml.safe_load(f)
 
-    cli_conf = OmegaConf.from_cli()
-    cfg = OmegaConf.merge(cfg, cli_conf)
-
-    extra_files = []
-    config_override_ = None
-    if cfg.config_override is not None:
-        override_path = "{}/{}".format(os.getcwd(), cfg.config_override)
+    # 2. Handle override
+    config_override_path = cfg.get('config_override')
+    if config_override_path is not None:
+        override_path = f"{os.getcwd()}/{config_override_path}"
         if path.exists(override_path):
-            app.logger.info("found {}".format(override_path))
-            config_override_ = OmegaConf.load(override_path)
-            app.logger.info(config_override)
-            extra_files.append(override_path)
+            app.logger.info(f"found {override_path}")
+            with open(override_path, 'r') as f:
+                config_override_ = yaml.safe_load(f)
+                cfg.update(config_override_)
+                # Ensure models are replaced if specified
+                if 'models' in config_override_:
+                    cfg['models'] = config_override_['models']
         else:
-            if cfg.verbose > 0:
-                app.logger.info("could not get override: {}".format(override_path))
-                print("could not get override: {}".format(override_path))
+            if cfg.get('verbose', 0) > 0:
+                app.logger.info(f"could not get override: {override_path}")
+                print(f"could not get override: {override_path}")
 
-        if config_override_ is not None:
-            cfg = OmegaConf.merge(cfg, config_override_)
+    if cfg.get('verbose', 0) > 0:
+        app.logger.info(json.dumps(cfg, indent=2))
 
-            # make sure models is replaced
-            if 'models' in config_override_:
-                cfg['models'] = config_override_.models
-
-
-    if cfg.verbose > 0:
-        app.logger.info(cfg.pretty())
-
-
-    for model_name, model_conf in cfg.models.items():
+    # 3. Instantiate Global Models
+    for model_name, model_conf in cfg.get('models', {}).items():
         try:
-            # this might fail
-            model_ = hydra.utils.instantiate(model_conf)
+            model_ = instantiate(model_conf)
             global_models[model_name] = model_
         except Exception as m:
             print(m)
-            if cfg.verbose:
-                print('could not start {}'.format(model_name))
-            pass
+            if cfg.get('verbose', 0) > 0:
+                print(f'could not start {model_name}')
 
     api = Api(app)
 
-
     api.add_resource(get_global_models_resource(), '/api', '/api/')
-
 
     for model_name, model_ in global_models.items():
         register_endpoints(api, model_name, model_, '/api')
 
-
     global user_models
-    user_model_default = hydra.utils.instantiate(cfg.user_model)
+    user_model_default = instantiate(cfg.get('user_model', {}))
+    
+    # Ensure it falls back to a Kamodo object if the yaml config was empty
+    if not isinstance(user_model_default, Kamodo):
+        user_model_default = Kamodo()
+        
     user_models = defaultdict(lambda: from_kamodo(user_model_default))
 
     api.add_resource(get_user_models_resource(), '/kamodo/api', '/kamodo/api/')
-
 
     @app.route('/kamodo/api/<user_model_name>', methods=['GET', 'POST'])
     @app.route('/kamodo/api/<user_model_name>/', methods=['GET', 'POST'])
@@ -190,7 +169,7 @@ def main():
                         model_name, user_func, type(result)))
                     return serialize(result)
                 except:
-                    return json.dumps(None)
+                    return flask.Response("null", mimetype='application/json')
             if request.method == "DELETE":
                 if user_func in user_model:
                     del user_model[user_func]
@@ -213,9 +192,11 @@ def main():
         try:
             function_defaults_ = json.dumps(function_defaults, default=serialize)
         except:
-            print('problem with {}.{}'.format(model_name, user_func))
+            print('problem with {}.{}'.format(user_model_name, user_func))
             raise
-        return jsonify(function_defaults_)
+        
+        # Return exact JSON string with correct HTTP headers
+        return flask.Response(function_defaults_, mimetype='application/json')
 
     @app.route('/kamodo/api/<user_model_name>/<user_func>/data', methods=['GET'])
     @app.route('/kamodo/api/<user_model_name>/<user_func>/data/', methods=['GET'])
@@ -223,10 +204,8 @@ def main():
         user_model = user_models[user_model_name]
         func = user_model[user_func]
         # assume function is kamodofied
-        return jsonify(json.dumps(func.data, default=serialize))
-        # function_defaults = get_defaults(func)
-        # func_data = func(**function_defaults)
-        # return jsonify(serialize(func_data))
+        func_data_str = json.dumps(func.data, default=serialize)
+        return flask.Response(func_data_str, mimetype='application/json')
 
     @app.route('/kamodo/api/<user_model_name>/<user_func>/plot', methods=['GET'])
     @app.route('/kamodo/api/<user_model_name>/<user_func>/plot/', methods=['GET'])
@@ -243,7 +222,6 @@ def main():
             else:
                 parser.add_argument(arg, type=str, required=True)
 
-
         app.logger.info('function plot resource called')
         args_ = parser.parse_args(strict=True)
         args = dict(indexing='ij') # needed for gridded data
@@ -252,17 +230,16 @@ def main():
             if val_ is not None:
                 args[argname] = pd.read_json(StringIO(val_), typ='series')
         figure = user_model.figure(variable=user_func, **args)
-        return go.Figure(figure).to_json()
+        
+        # Plotly returns a JSON string, wrap it in a proper Response
+        return flask.Response(go.Figure(figure).to_json(), mimetype='application/json')
 
-
-
+    flask_cfg = cfg.get('flask', {})
     try:
-        app.run(host=cfg.flask.host, port=cfg.flask.port)
+        app.run(host=flask_cfg.get('host', '0.0.0.0'), port=flask_cfg.get('port', 5000))
     except OSError as m:
-        print('cannot start with configuration', cfg.flask)
+        print('cannot start with configuration', flask_cfg)
         raise
-
-
 
 
 def get_model_details(model):

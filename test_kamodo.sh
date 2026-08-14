@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PYTHONPATH=. coverage run -m pytest tests/test_kamodo.py
+PYTHONPATH=. coverage run -m pytest
 
 coverage report -m
 
