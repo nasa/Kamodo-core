@@ -5,4 +5,5 @@ pymdown-extensions
 mkdocs-include-markdown-plugin
 mkdocstrings[python]
 build
+twine
 
