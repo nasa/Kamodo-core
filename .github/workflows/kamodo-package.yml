@@ -35,7 +35,4 @@ jobs:
           python -m pip install flake8 pytest pytest-cov requests
           python -m pip install notebook kaleido pyOpenSSL
           python -m pip install .
-          # Verify that this old pin is intentional and supports every
-          # Python version in the matrix.
-          python -m pip install "sympy==1.5.1"
 
