@@ -6,8 +6,6 @@
 ![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)
 ![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)
 
-<!-- [![codecov](https://codecov.io/gh/asherp/Kamodo/branch/master/graph/badge.svg?token=W1B3L19REF)](https://codecov.io/gh/asherp/Kamodo)  -->
-
 Kamodo is an open source CCMC tool for access, interpolation, and visualization of space weather models and data in python.
 Kamodo allows model developers to represent simulation results as mathematical functions which may be manipulated directly by end users.
 This general approach allows observational data to be represented functionally, through the use of interpolators.
@@ -16,7 +14,7 @@ These features allow Kamodo to be used in other fields of study and as a teachin
 
 
 This repository hosts the core Kamodo libraries under a permissive [NASA open source license](https://github.com/nasa/Kamodo-core//blob/master/LICENSE).
-The core library supports function registration, composition, unit conversion, automated plotting, LaTeX I/O, and remote procedure call (RPC) interfaces.
+The core library supports function registration, composition, unit conversion, automated plotting, LaTeX I/O, and Flask-backed REST API integrations.
 
 Space weather simulation readers are implemented as subclasses of the Kamodo base class and are developed and maintained by the Community Coordinated Modeling Center, located at NASA Goddard Space Flight Center. CCMC's Kamodo readers may be found here [https://github.com/nasa/Kamodo/](https://github.com/nasa/Kamodo/)
 
@@ -134,27 +132,22 @@ This should open a browser window that will allow you to load any of the example
 
 #### Requirements
 
-The following (minimum) requirements are obtained by running `pip install kamodo`
+The core library requires:
 
-* decorator>=4.4.2
+* python-forge
 * numpy
 * scipy
-* sympy==1.5.1
+* sympy>=1.12
 * pandas
 * plotly
 * kaleido
 * pytest
-* hydra-core==0.11.3
-* Flask==1.1.2
+* Flask>=3.0
 * flask-cors
-* flask-restful==0.3.8
+* flask-restful
 * antlr4-python3-runtime>=4.11,<4.12
-* python-forge
 * requests
-* incremental
-* pycapnp
-* pyOpenSSL
-
+* pyyaml
 
 The antlr package may be necessary for rendering latex in a notebook
 
@@ -175,23 +168,15 @@ pip install pytest-cov
 Then, from the base of the git repo, run tests
 
 ```sh
-pytest tests/test_*.py
+pytest
 ```
 
-or check code coverage with
+or check code coverage of tests with
 
 ```sh
-PYTHONPATH=. coverage run -m pytest tests/test_*.py
+PYTHONPATH=. coverage run -m pytest
 coverage report -m
 ```
 
-Run tests locally prior to pushing.
-
-To run RPC tests, you must first generate a self-signed certificate.
-
-```sh
-python kamodo/rpc/gen_self_signed_cert.py certfile
-# certfile.key and certfile.cert will be placed in your local directory
-pytest kamodo/rpc/test_rpc_threaded.py
-```
+Run tests locally prior to pushing changes to GitHub.
 

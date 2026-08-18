@@ -1,38 +1,54 @@
 site_name: Kamodo Core Analysis Suite
 
-nav:
-- Home: README.md
-- About: about.md
-- Introduction: notebooks/Kamodo.ipynb
-- Visualization: notebooks/Visualization.ipynb
-- Syntax: notebooks/Syntax.ipynb
-- Kamodofying Models: notebooks/Kamodofying_Models.ipynb
-- Field Integration: notebooks/FieldIntegration.ipynb
-- RPC: rpc.md
-- API: API.md
-- Contributing: CONTRIBUTING.md
-- Additional Resources: additional_resources.md
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: indigo
+    accent: blue
 
-theme: readthedocs
 use_directory_urls: False
+
 plugins:
+  - search
+  - include-markdown
   - mkdocs-jupyter:
       include_source: True
       kernel_name: python3
       execute: False
-      ignore_h1_titles: False
-  - search
+      ignore_h1_titles: True
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+
 markdown_extensions:
   - admonition
+  - attr_list
   - tables
-  - mdx_math:
-      enable_dollar_delimiter: True 
   - toc:
       permalink: true
-  - markdown_include.include:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
       base_path: docs
-  - codehilite
-  - mkautodoc
+  - pymdownx.superfences
 
-extra_javascript: 
-    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: README.md
+  - About: about.md
+  - Introduction: notebooks/Kamodo.ipynb
+  - Visualization: notebooks/Visualization.ipynb
+  - Syntax: notebooks/Syntax.ipynb
+  - Kamodofying Models: notebooks/Kamodofying_Models.ipynb
+  - Field Integration: notebooks/FieldIntegration.ipynb
+  - Contributing: CONTRIBUTING.md
+  - Additional Resources: additional_resources.md
+

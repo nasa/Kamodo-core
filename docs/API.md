@@ -3,27 +3,30 @@
 ## Kamodo
 
 ::: kamodo.Kamodo
-    :docstring:
 
 ### Initialization
 
 ::: kamodo.Kamodo
-    :members: __init__
-
+    options:
+      members:
+        - __init__
 
 ### Registering functions
 
 ::: kamodo.Kamodo
-    :members: __setitem__
-
+    options:
+      members:
+        - __setitem__
 
 ### Retrieving functions
 
 Registered functions may be accessed via dictionary or attribute syntax.
 
 ::: kamodo.Kamodo
-    :members: __getitem__ __getattr__
-
+    options:
+      members:
+        - __getitem__
+        - __getattr__
 
 ### Evaluation
 
@@ -32,7 +35,6 @@ Function evaluation may be performed either by keyword or attribute syntax:
 ```py
 k = Kamodo(f='x^2-x-1')
 assert k.f(3) == k['f'](3)
-```
 
 For closed-form expressions, kamodo uses the highly optimized [numexpr](https://numexpr.readthedocs.io/projects/NumExpr3/en/latest/intro.html) library if available and will fall back to numpy otherwise:
 
@@ -45,20 +47,6 @@ Programmatic evaluation is also possible:
 
 ::: kamodo.Kamodo
     :members: evaluate
-
-### RPC server
-
-Start a Kamodo asyncio server using `kamodo.serve`:
-
-::: kamodo.Kamodo
-    :members: serve
-
-### RPC client
-
-Start a Kamodo Client using the `KamodoClient` class:
-
-::: kamodo.KamodoClient
-    :members: __init__
 
 ### Plotting
 
@@ -171,88 +159,4 @@ from kamodo import kamodofy
 
 ::: kamodo.util.partial
     :docstring:
-
-
-## Test Suite
-
-Kamodo features a full suite of tests run via pytest. We highlight a few of these tests below as further examples of Kamodo's expected use cases.
-
-### Kamodo Tests
-
-::: kamodo.test_kamodo.test_Kamodo_expr
-    :docstring: 
-
-::: kamodo.test_kamodo.test_Kamodo_latex
-    :docstring: 
-
-::: kamodo.test_kamodo.test_Kamodo_mismatched_symbols
-    :docstring: 
-
-::: kamodo.test_kamodo.test_Kamodo_reassignment
-    :docstring: 
-
-::: kamodo.test_kamodo.test_function_registry
-    :docstring: 
-
-::: kamodo.test_kamodo.test_unit_registry
-    :docstring: 
-
-::: kamodo.test_kamodo.test_komodofy_decorator
-    :docstring: 
-
-::: kamodo.test_kamodo.test_vectorize
-    :docstring: 
-
-::: kamodo.test_kamodo.test_jit_evaluate
-    :docstring:  
-
-::: kamodo.test_kamodo.test_multiple_traces
-    :docstring:
-
-### Plotting Tests
-
-::: kamodo.test_plotting.test_scatter_plot
-    :docstring:
-
-::: kamodo.test_plotting.test_line_plot_line
-    :docstring:
-
-::: kamodo.test_plotting.test_line_plot_2d_line
-    :docstring:
-
-::: kamodo.test_plotting.test_line_plot_3d_line_pd
-    :docstring:
-
-::: kamodo.test_plotting.test_vector_plot_2d_vector
-    :docstring:
-
-::: kamodo.test_plotting.test_vector_plot_3d_vector
-    :docstring:
-
-::: kamodo.test_plotting.test_vector_plot_3d_vector
-    :docstring:
-
-::: kamodo.test_plotting.test_contour_plot_2d_grid
-    :docstring:
-
-::: kamodo.test_plotting.test_contour_plot_2d_skew
-    :docstring:
-
-::: kamodo.test_plotting.test_plane
-    :docstring:
-
-::: kamodo.test_plotting.test_surface_3d_surface
-    :docstring:
-
-::: kamodo.test_plotting.test_arg_shape_pd
-    :docstring:
-
-::: kamodo.test_plotting.test_image_plot
-    :docstring:
-
-
-
-
-
-
 

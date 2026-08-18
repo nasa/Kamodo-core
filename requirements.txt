@@ -1,6 +1,7 @@
 mkdocs
+mkdocs-material
 mkdocs-jupyter
-mknotebooks
-mkautodoc
-python-markdown-math
-markdown_include
+pymdown-extensions
+mkdocs-include-markdown-plugin
+mkdocstrings[python]
+
