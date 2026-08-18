@@ -1,8 +1,59 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kamodo-core-official"  # Update this to your chosen new PyPI name
+version = "26.08.5"
+description = "A functional api for scientific data"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Darren De Zeeuw", email = "darren.dezeeuw@nasa.gov" }
+]
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Operating System :: OS Independent",
+  "License :: OSI Approved",
+]
+dependencies = [
+  "decorator>=4.4.2",
+  "numpy",
+  "scipy",
+  "sympy",
+  "antlr4-python3-runtime>=4.11,<4.12",
+  "pandas",
+  "plotly",
+  "kaleido",
+  "pytest",
+  "pytest-cov",
+  "Flask>=3.0.0",
+  "flask-cors>=4.0.0",
+  "flask-restful>=0.3.10",
+  "python-forge",
+  "requests",
+  "pyYAML",
+]
+
+[project.urls]
+Homepage = "https://github.com/nasa/Kamodo-core"
+
+[project.scripts]
+kamodo = "kamodo.cli.main:entry"
+kamodo-gui = "kamodo.cli.gui:entry"
+kamodo-serve = "kamodo.cli.api:main"
+kamodo-rpc = "kamodo.cli.rpc:entry"
+gen-self-signed-cert = "kamodo.rpc.gen_self_signed_cert:entry"
+
+[tool.setuptools.packages.find]
+where = ["."]
 
 [tool.pytest.ini_options]
 filterwarnings = [
     "ignore:.*iscoroutinefunction.*:DeprecationWarning"
 ]
-
