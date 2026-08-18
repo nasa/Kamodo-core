@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -35,4 +35,5 @@ jobs:
           python -m pip install flake8 pytest pytest-cov requests
           python -m pip install notebook kaleido pyOpenSSL
           python -m pip install .
+          pytest
 
