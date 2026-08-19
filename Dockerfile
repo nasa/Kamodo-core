@@ -3,7 +3,7 @@ LABEL maintainer "Asher Pembroke <apembroke@gmail.com>"
 
 RUN conda install jupyter
 RUN pip install antlr4-python3-runtime
-# RUN pip install kamodo
+# RUN pip install kamodo-core-official
 
 WORKDIR /
 

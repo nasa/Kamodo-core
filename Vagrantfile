@@ -62,10 +62,11 @@ BEGIN {
     sudo -u vagrant bash -c "\
       source /opt/conda/etc/profile.d/conda.sh \
         && conda init \
-        && conda create -n kamodo python==3.7 \
-        && conda activate kamodo \
+        && conda create -n envkamodo python==3.14 \
+        && conda activate envkamodo \
         && conda install jupyter \
-        && pip install kamodo-core mkdocs python-markdown-math markdown-include mknotebooks \
+        && pip install kamodo-core-official \
+        && pip install -r requirements.txt \
         && (jupyter notebook --no-browser --ip 0.0.0.0 /vagrant/docs/notebooks > ~/jupyter.out 2>&1 &) \
         && sleep 10 \
         && jupyter notebook list"

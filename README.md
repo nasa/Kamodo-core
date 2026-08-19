@@ -88,7 +88,7 @@ Head over to the [Introduction](notebooks/Kamodo.ipynb) page for more details.
 Kamodo may be installed from pip
 
 ```console
-pip install kamodo
+pip install kamodo-core-official
 ```
 
 To get the latest version of Kamodo Core, install from the NASA git repo:
@@ -108,25 +108,25 @@ Download and install miniconda from [here](https://conda.io/miniconda.html). The
 Create a new environment for kamodo
 
 ```console
-conda create -n kamodo python=3.14
-conda activate kamodo
-(kamodo) pip install kamodo
+conda create -n envkamodo python=3.14
+conda activate envkamodo
+(envkamodo) pip install kamodo-core-official
 ```
 !!! note
-    The leading (kamodo) in your prompt indicates that you have activated the `kamodo` environment.
-    From here on, anything you install will be isolated to the `kamodo` environment.
+    The leading (envkamodo) in your prompt indicates that you have activated the `envkamodo` environment.
+    From here on, anything you install will be isolated to the `envkamodo` environment.
 
 #### Loading example notebooks
 
 If you want to run any of the notebooks in docs, you will need to install `jupyter`:
 
 ```console
-(kamodo) conda install jupyter
+(envkamodo) pip install jupyter
 ```
 
 Navigate to the top-level of the kamodo repo, then point jupyter to `docs/notebooks`:
 
-    (kamodo) jupyter notebook docs/notebooks
+    (envkamodo) jupyter notebook docs/notebooks
 
 This should open a browser window that will allow you to load any of the example notebooks.
 
@@ -152,7 +152,7 @@ The core library requires:
 The antlr package may be necessary for rendering latex in a notebook
 
 ```sh
-conda install antlr-python-runtime
+pip install antlr-python-runtime
 ```
 
 
@@ -161,8 +161,7 @@ conda install antlr-python-runtime
 Kamodo's unit tests are run with [pytest](https://docs.pytest.org/en/7.0.x/). To install pytest with code coverage
 
 ```sh
-python -m pip install flake8 pytest
-pip install pytest-cov
+pip install pytest pytest-cov
 ```
 
 Then, from the base of the git repo, run tests

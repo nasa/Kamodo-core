@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kamodocore"
-version = "26.08.5"
+name = "kamodo-core-official"
+version = "26.08.7"
 description = "A functional api for scientific data"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -3,7 +3,7 @@
 FROM continuumio/miniconda3:latest
 LABEL maintainer "Asher Pembroke <apembroke@predsci.com>"
 
-RUN conda install python=3.7
+RUN conda install python=3.14
 
 # RUN conda install jupyter
 RUN pip install antlr4-python3-runtime
@@ -15,21 +15,15 @@ RUN pip install antlr4-python3-runtime
 # RUN chmod +x /usr/bin/tini
 # ENTRYPOINT ["/usr/bin/tini", "--"]
 
-# need to pin this version for api
-RUN pip install sympy==1.5.1
-
-# Keep plotly at lower api
-RUN pip install plotly==4.7.1
-
 # Install latest kamodo
 ADD . /kamodo
 
-# RUN git clone https://github.com/asherp/kamodo.git
-RUN pip install -e kamodo
+# RUN git clone https://github.com/nasa/kamodo-core.git
+RUN pip install -e kamodo-core-official
 
-RUN conda install jupyter
+RUN pip install -r requirements.txt
 
-RUN pip install pycapnp
+RUN pip install jupyter
 
 WORKDIR kamodo
 
