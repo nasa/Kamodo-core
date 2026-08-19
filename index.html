@@ -771,7 +771,7 @@ Kamodo also generates quick-look graphics via function inspection.
 <p>Head over to the <a href="notebooks/Kamodo.html">Introduction</a> page for more details.</p>
 <h2 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
 <p>Kamodo may be installed from pip</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="go">pip install kamodo</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="go">pip install kamodo-core-official</span>
 </code></pre></div>
 <p>To get the latest version of Kamodo Core, install from the NASA git repo:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="go">pip install git+https://github.com/nasa/Kamodo-core.git</span>
@@ -781,21 +781,21 @@ Kamodo also generates quick-look graphics via function inspection.
 <p>Download and install miniconda from <a href="https://conda.io/miniconda.html">here</a>. The advantage to using miniconda is that each new environment includes the bare-minimum for a project. This allows you to keep many different projects on a single work station.</p>
 <h4 id="create-kamodo-environment">Create Kamodo environment<a class="headerlink" href="#create-kamodo-environment" title="Permanent link">&para;</a></h4>
 <p>Create a new environment for kamodo</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="go">conda create -n kamodo python=3.14</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="go">conda activate kamodo</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="gp gp-VirtualEnv">(kamodo)</span> <span class="go">pip install kamodo</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="go">conda create -n envkamodo python=3.14</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="go">conda activate envkamodo</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="gp gp-VirtualEnv">(envkamodo)</span> <span class="go">pip install kamodo-core-official</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The leading (kamodo) in your prompt indicates that you have activated the <code>kamodo</code> environment.
-From here on, anything you install will be isolated to the <code>kamodo</code> environment.</p>
+<p>The leading (envkamodo) in your prompt indicates that you have activated the <code>envkamodo</code> environment.
+From here on, anything you install will be isolated to the <code>envkamodo</code> environment.</p>
 </div>
 <h4 id="loading-example-notebooks">Loading example notebooks<a class="headerlink" href="#loading-example-notebooks" title="Permanent link">&para;</a></h4>
 <p>If you want to run any of the notebooks in docs, you will need to install <code>jupyter</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="gp gp-VirtualEnv">(kamodo)</span> <span class="go">conda install jupyter</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="gp gp-VirtualEnv">(envkamodo)</span> <span class="go">pip install jupyter</span>
 </code></pre></div>
 <p>Navigate to the top-level of the kamodo repo, then point jupyter to <code>docs/notebooks</code>:</p>
-<div class="highlight"><pre><span></span><code>(kamodo) jupyter notebook docs/notebooks
+<div class="highlight"><pre><span></span><code>(envkamodo) jupyter notebook docs/notebooks
 </code></pre></div>
 <p>This should open a browser window that will allow you to load any of the example notebooks.</p>
 <h4 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h4>
@@ -817,12 +817,11 @@ From here on, anything you install will be isolated to the <code>kamodo</code> e
 <li>pyyaml</li>
 </ul>
 <p>The antlr package may be necessary for rendering latex in a notebook</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>conda<span class="w"> </span>install<span class="w"> </span>antlr-python-runtime
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>pip<span class="w"> </span>install<span class="w"> </span>antlr-python-runtime
 </code></pre></div>
 <h2 id="test-suite">Test Suite<a class="headerlink" href="#test-suite" title="Permanent link">&para;</a></h2>
 <p>Kamodo's unit tests are run with <a href="https://docs.pytest.org/en/7.0.x/">pytest</a>. To install pytest with code coverage</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>flake8<span class="w"> </span>pytest
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pytest-cov
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-cov
 </code></pre></div>
 <p>Then, from the base of the git repo, run tests</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>pytest
