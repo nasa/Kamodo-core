@@ -37,10 +37,40 @@ from sympy.physics.units.quantities import Quantity
 from sympy.physics.units.systems.si import dimsys_SI
 from sympy.physics.units import convert_to
 from sympy.utilities.autowrap import ufuncify
-from sympy.parsing.sympy_parser import (
-    parse_expr,
-    standard_transformations
-)
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations
+import ast
+
+def validate_ast(expr_str):
+    """AST whitelist to prevent RCE by rejecting dangerous nodes."""
+    if not isinstance(expr_str, str):
+        return
+    
+    try:
+        tree = ast.parse(expr_str, mode='eval')
+    except SyntaxError:
+        return # Let standard SymPy parsing handle syntax errors naturally
+
+    # Whitelist of allowed nodes: Names, Constants, and basic math operations[cite: 1]
+    allowed_nodes = (
+        ast.Expression, ast.Name, ast.Load,
+        ast.Constant, getattr(ast, 'Num', type(None)), getattr(ast, 'Str', type(None)), getattr(ast, 'NameConstant', type(None)),
+        ast.BinOp, ast.UnaryOp, ast.operator, ast.unaryop, ast.cmpop,
+        ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.Pow,
+        ast.UAdd, ast.USub, ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE,
+        ast.Call, ast.Tuple, ast.List
+    )
+
+    for node in ast.walk(tree):
+        if not isinstance(node, allowed_nodes):
+            raise ValueError(f"Security Error: Disallowed AST node type '{type(node).__name__}'.")
+        
+        # Deny Attribute access outright to prevent module traversal[cite: 1]
+        if isinstance(node, ast.Attribute):
+            raise ValueError("Security Error: Attribute access is not allowed.")
+            
+        # Restrict Calls to simple Name targets only (no chaining or attributes)[cite: 1]
+        if isinstance(node, ast.Call) and not isinstance(node.func, ast.Name):
+            raise ValueError("Security Error: Only direct function calls are allowed.")
 
 def safe_sympify(expr, local_dict=None):
     """Safely converts strings, expressions, or objects into SymPy objects."""
@@ -55,12 +85,18 @@ def safe_sympify(expr, local_dict=None):
 
     # Parse string inputs safely without implicit multiplication
     if isinstance(expr, str):
+        # Apply AST Whitelist
+        validate_ast(expr)
+        
+        # Strip __builtins__ as defense in depth
+        safe_globals = {'__builtins__': {}}
+        
         # Apply standard transformations only
         transformations = standard_transformations
         try:
-            return parse_expr(expr, local_dict=clean_locals, transformations=transformations)
+            return parse_expr(expr, local_dict=clean_locals, global_dict=safe_globals, transformations=transformations)
         except Exception:
-            return sympify(expr, locals=clean_locals)
+            pass
 
     # Convert existing objects/expressions safely
     try:

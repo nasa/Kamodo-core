@@ -42,9 +42,6 @@ import logging
 
 app = Flask(__name__)
 
-CORS(app) # enable Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
-
-
 def get_api(app):
     """get restful api for this app"""
     api = Api(app)
@@ -116,6 +113,9 @@ def main():
 
     api.add_resource(get_user_models_resource(), '/kamodo/api', '/kamodo/api/')
 
+    allowed_origins = cfg.get('flask', {}).get('allowed_origins', ['http://localhost:5000'])
+    CORS(app, resources={r"/kamodo/api/*": {"origins": allowed_origins}})
+
     @app.route('/kamodo/api/<user_model_name>', methods=['GET', 'POST'])
     @app.route('/kamodo/api/<user_model_name>/', methods=['GET', 'POST'])
     @app.route('/kamodo/api/<user_model_name>/<user_func>', methods=['GET', 'POST', "DELETE"])
@@ -124,10 +124,25 @@ def main():
         print(user_model_name, user_func)
         print(user_model)
 
+        # AUTHENTICATION CHECK
+        if request.method in ['POST', 'DELETE']:
+            # Temporary block: Authentication system is pending development.
+            # Reject all mutating requests to prevent unauthorized model changes.
+            return flask.Response(
+                "401 Unauthorized: Model modification is temporarily disabled pending authentication implementation.", 
+                status=401
+            )
+
         if request.method == 'POST':
             func_key = request.form['signature']
             if 'expression' in request.form:
                 func_expr = request.form['expression']
+                
+                # ADD LOGGING BLOCK
+                import hashlib
+                expr_hash = hashlib.sha256(func_expr.encode()).hexdigest()
+                app.logger.warning(f"Expression registration: model={user_model_name}, signature={func_key}, hash={expr_hash}")
+
                 if func_key in user_model:
                     del user_model[func_key]
                 user_model[func_key] = func_expr

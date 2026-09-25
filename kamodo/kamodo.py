@@ -58,11 +58,10 @@ from util import sign_defaults
 from util import simulate
 from util import unify, get_abbrev, get_expr_unit
 from util import unit_subs
-from util import safe_sympify
+from util import safe_sympify, validate_ast
 
 _clash['rad'] = Symbol('rad')
 _clash['deg'] = Symbol('deg')
-
 
 def parse_expr(*args, **kwargs):
     """Safely converts string/object inputs using safe_sympify while preserving function syntax."""
@@ -72,6 +71,10 @@ def parse_expr(*args, **kwargs):
         
         expr_str = args[0] if (args and isinstance(args[0], str)) else ""
         
+        # Apply AST whitelist before any parsing logic is executed
+        if expr_str:
+            validate_ast(expr_str)
+            
         # Dynamically build clean_locals based on how the token is used in the string
         clean_locals = {}
         if local_dict:
