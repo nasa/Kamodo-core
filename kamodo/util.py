@@ -1248,7 +1248,10 @@ def deserialize(obj):
             #     base64.b64decode(obj['__ndarray__']),
             #     dtype=np.dtype(obj['dtype'])
             # ).reshape(obj['shape'])
-            return np.array(obj['__ndarray__'])
+            array = np.array(obj['__ndarray__'], dtype=obj.get('dtype'))
+            if 'shape' in obj:
+                array = array.reshape(obj['shape'])
+            return array
         if '__npgeneric__' in obj:
             # return np.frombuffer(
             #     base64.b64decode(obj['__npgeneric__']),
